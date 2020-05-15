@@ -56,5 +56,4 @@ public class ManagerDAO {
 			pstatement.executeUpdate();	//eseguo l'inserimento della campagna nel db
 		}
 	}
-	
 }

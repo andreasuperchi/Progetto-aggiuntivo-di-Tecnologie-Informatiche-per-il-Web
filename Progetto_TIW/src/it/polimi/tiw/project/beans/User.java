@@ -66,6 +66,5 @@ public class User{
 	public void setImage(Blob image) {
 		this.image = image;
 	}
-	
 }
 
