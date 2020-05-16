@@ -10,20 +10,20 @@ import it.polimi.tiw.project.beans.User;
 
 public class UserDAO {
 	private Connection connection;
-	
+
 	public UserDAO(Connection connection) {
 		this.connection = connection;
 	}
-	
+
 	public User checkCredentials(String username, String password) throws SQLException {
 		String query = "SELECT id, username, role FROM user WHERE username = ? AND password = ?";
-		
+
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setString(1, username);
 			pstatement.setString(2, password);
-			
+
 			try (ResultSet result = pstatement.executeQuery();) {
-				if (!result.isBeforeFirst()) { //corrispondenza non trovata
+				if (!result.isBeforeFirst()) { // corrispondenza non trovata
 					return null;
 				} else {
 					result.next();
@@ -36,36 +36,34 @@ public class UserDAO {
 			}
 		}
 	}
-	
-	public void addUser(String username,String email, String password, String experience, String role, Blob image) throws SQLException {		
-		if (role.toUpperCase().equals("MANAGER")) {
-			String query = "INSERT INTO user (username, email, password, role) VALUES (?,?,?,?)";
 
-			try (PreparedStatement pstatement = connection.prepareStatement(query);){
+	public void addUser(String username, String password, String email, String experience, Blob photo, String role)
+			throws SQLException {
+		if (role.toUpperCase().equals("MANAGER")) {
+			String query = "INSERT INTO user (username, password, email, role) VALUES (?, ?, ?, ?)";
+
+			try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 				pstatement.setString(1, username);
-				pstatement.setString(2, email);
-				pstatement.setString(3, password);
+				pstatement.setString(2, password);
+				pstatement.setString(3, email);
 				pstatement.setString(4, role);
-				
+
 				pstatement.executeUpdate();
 			}
-		}
-		else {
-			String query = "INSERT INTO user (username, email, password,experience, photo, role) VALUES (?,?,?,?,?,?)";
+		} else {
+			String query = "INSERT INTO user (username, password, email, experience, photo, role) VALUES (?, ?, ?, ?, ?, ?)";
 
-			try (PreparedStatement pstatement = connection.prepareStatement(query);){
+			try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 				pstatement.setString(1, username);
-				pstatement.setString(2, email);
-				pstatement.setString(3, password);
+				pstatement.setString(2, password);
+				pstatement.setString(3, email);
 				pstatement.setString(4, experience);
-				pstatement.setBlob(5, image);
+				pstatement.setBlob(5, photo);
 				pstatement.setString(6, role);
-				
+
 				pstatement.executeUpdate();
 			}
 		}
 	}
-	
-	
-	
+
 }

@@ -59,7 +59,7 @@ public class CheckLogin extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Credential checking error!");
 		}
 		
-		String path = getServletContext().getContextPath();	//mi salvo il path
+		String path = getServletContext().getContextPath();	//mi salvo il path di "default"
 		
 		if (userBean == null) {
 			path = getServletContext().getContextPath() + "/index.html";	//se la creazione del bean fallisce, reindirizzo alla homepage

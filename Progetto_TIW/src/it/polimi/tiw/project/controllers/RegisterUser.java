@@ -3,12 +3,15 @@ package it.polimi.tiw.project.controllers;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import it.polimi.tiw.project.dao.UserDAO;
 
 @WebServlet("/RegisterUser")
 public class RegisterUser extends HttpServlet {
@@ -31,12 +34,17 @@ public class RegisterUser extends HttpServlet {
 		Blob photo = (Blob) request.getAttribute("photo");
 		String role = request.getParameter("role");
 		
-		if (role.equals("manager")) {
-			ManagerDAO manDAO = new ManagerDAO(connection, );
-			User manBean = null;
-		} else {
-			
+		UserDAO userDAO = new UserDAO(connection);
+		
+		try {
+			userDAO.addUser(username, password, email, experience, photo, role);
+		} catch(SQLException e) {
+			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Registration failure!");
 		}
+		
+		String loginPath = getServletContext().getContextPath() + "/index.html";
+		
+		response.sendRedirect(loginPath);	//reindirizzo l'utente appena registrato alla pagina di login
 	}
 
 }
