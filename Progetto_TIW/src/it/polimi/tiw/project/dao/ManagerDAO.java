@@ -20,7 +20,7 @@ public class ManagerDAO {
 	
 	public List<Campaign> findCampaigns() throws SQLException {
 		List<Campaign> campaigns = new ArrayList<Campaign>();
-		String query = "SELECT id, name FROM campaign WHERE id_manager = ? ORDER BY name ASC";
+		String query = "SELECT * FROM campaign WHERE id_manager = ? ORDER BY name ASC";
 		
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {	//preparo una query SQL precompilata
 			pstatement.setInt(1, this.id);	//setto il mio ID come parametro

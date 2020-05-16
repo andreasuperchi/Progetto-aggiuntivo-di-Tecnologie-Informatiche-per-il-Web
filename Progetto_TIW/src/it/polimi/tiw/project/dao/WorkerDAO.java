@@ -20,7 +20,7 @@ public class WorkerDAO {
 	
 	public List<Campaign> findSubmittedCampaign() throws SQLException{
 		List <Campaign> submittedCampaigns = new ArrayList <Campaign>();
-		String query = "SELECT id FROM worker_campaign WHERE id_worker  = ? ORDERED BY name ASC ";
+		String query = "SELECT * FROM worker_campaign WHERE id_worker  = ? ORDERED BY name ASC ";
 		try (PreparedStatement pstatement = connection.prepareStatement(query)){
 			pstatement.setInt(1, this.id);
 			try (ResultSet result = pstatement.executeQuery()){
@@ -42,7 +42,7 @@ public class WorkerDAO {
 	
 	public List<Campaign> findAvailableCampaign() throws SQLException{
 		List <Campaign> availableCampaigns = new ArrayList <Campaign>();
-		String query = "SELECT id FROM worker_campaign WHERE id_worker  != ? ORDERED BY name ASC ";
+		String query = "SELECT * FROM worker_campaign WHERE id_worker  != ? ORDERED BY name ASC ";
 		try (PreparedStatement pstatement = connection.prepareStatement(query)){
 			pstatement.setInt(1, this.id);
 			try (ResultSet result = pstatement.executeQuery()){
@@ -62,7 +62,7 @@ public class WorkerDAO {
 	
 	
 	public void submitCampaign(int id_campaign) throws SQLException {
-		String query = "INSERT into worker_campaign (id_worker, id_campaign) VALUES (?,?)";
+		String query = "INSERT into worker_campaign (id_worker, id_campaign) VALUES (?, ?)";
 		try (PreparedStatement pstatement = connection.prepareStatement(query)){
 			pstatement.setInt(1, id);
 			pstatement.setInt(2, id_campaign);
