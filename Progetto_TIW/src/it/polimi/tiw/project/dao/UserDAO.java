@@ -1,5 +1,6 @@
 package it.polimi.tiw.project.dao;
 
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -35,4 +36,36 @@ public class UserDAO {
 			}
 		}
 	}
+	
+	public void addUser(String username,String email, String password, String experience, String role, Blob image) throws SQLException {		
+		if (role.toUpperCase().equals("MANAGER")) {
+			String query = "INSERT INTO user (username, email, password, role) VALUES (?,?,?,?)";
+
+			try (PreparedStatement pstatement = connection.prepareStatement(query);){
+				pstatement.setString(1, username);
+				pstatement.setString(2, email);
+				pstatement.setString(3, password);
+				pstatement.setString(4, role);
+				
+				pstatement.executeUpdate();
+			}
+		}
+		else {
+			String query = "INSERT INTO user (username, email, password,experience, photo, role) VALUES (?,?,?,?,?,?)";
+
+			try (PreparedStatement pstatement = connection.prepareStatement(query);){
+				pstatement.setString(1, username);
+				pstatement.setString(2, email);
+				pstatement.setString(3, password);
+				pstatement.setString(4, experience);
+				pstatement.setBlob(5, image);
+				pstatement.setString(6, role);
+				
+				pstatement.executeUpdate();
+			}
+		}
+	}
+	
+	
+	
 }

@@ -1,6 +1,7 @@
 package it.polimi.tiw.project.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,7 +19,7 @@ public class ImageDAO {
 		this.id = id;
 	}
 
-	public void addAnnotation(Date creationDate, String validity, String trust, String note, int id_worker) {
+	public void addAnnotation(Date creationDate, String validity, String trust, String note, int id_worker) throws SQLException{
 		String query = "INSERT INTO annotation (creation_date, validity, trust, note, id_image, id_worker) VALUES (?, ?, ?, ?, ?, ?)";
 		
 		try(PreparedStatement pstatement = connection.prepareStatement(query);) {
