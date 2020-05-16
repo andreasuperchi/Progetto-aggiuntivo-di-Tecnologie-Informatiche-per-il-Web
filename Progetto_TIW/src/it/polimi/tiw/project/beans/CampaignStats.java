@@ -4,8 +4,17 @@ public class CampaignStats {
 	private int numberOfImages;
 	private int numberOfAnnotations;
 	private float averageAnnotationsPerImage;
+	private int conflictualAnnotation;
 	
 	
+	public int getConflictalAnnotation() {
+		return conflictualAnnotation;
+	}
+
+	public void setConflictalAnnotation(int conflictalAnnotation) {
+		this.conflictualAnnotation = conflictalAnnotation;
+	}
+
 	public int getNumberOfImages() {
 		return numberOfImages;
 	}
