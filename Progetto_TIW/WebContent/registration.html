@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>TIW Registration Page</title>
+</head>
+<body>
+	<h1>Fill in the form to register.</h1>
+	<form action="RegisterUser" method="post">
+		Username: <input type="text" name="username"> <br>
+		Password: <input type="password" name="password"> <br>
+		Email: <input type="email" name="email"> <br>
+		Experience: <select name="experience">
+			<option value="high">High</option>
+			<option value="medium">Medium</option>
+			<option value="low">Low</option> </select> <br>
+		Image: <input type="file" name="photo"> <br>
+		Role: <select name="role">
+			<option value="manager">Manager</option>
+			<option value="worker">Worker</option> </select> <br>
+			
+			<input type="submit" value="Register Now">
+	</form>
+</body>
+</html>

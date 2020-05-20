@@ -39,7 +39,7 @@ public class UserDAO {
 
 	public void addUser(String username, String password, String email, String experience, Blob photo, String role)
 			throws SQLException {
-		if (role.toUpperCase().equals("MANAGER")) {
+		if (role.equals("manager")) {
 			String query = "INSERT INTO user (username, password, email, role) VALUES (?, ?, ?, ?)";
 
 			try (PreparedStatement pstatement = connection.prepareStatement(query);) {

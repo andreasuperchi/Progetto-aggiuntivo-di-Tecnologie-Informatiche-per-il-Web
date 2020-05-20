@@ -36,9 +36,9 @@ public class CheckLogin extends HttpServlet {
 			connection = DriverManager.getConnection(url, user, password);
 
 		} catch (ClassNotFoundException e) {
-			throw new UnavailableException("Can't load database driver");
+			throw new UnavailableException("Error! Unable to load database driver.");
 		} catch (SQLException e) {
-			throw new UnavailableException("Couldn't get db connection");
+			throw new UnavailableException("Error! Couldn't get database connection.");
 		}
 	}
     
