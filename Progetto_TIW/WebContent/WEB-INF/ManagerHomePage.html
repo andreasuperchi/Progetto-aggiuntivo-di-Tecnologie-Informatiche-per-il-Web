@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Manager HomePage</title>
+</head>
+<body>
+	<div align="left">
+		<a th:href="@{/Logout}">Logout</a>
+	</div>
+	<div align="right">
+		<a th:href="@{/ChangePersonalInfo}">Change personal Info</a>
+	</div>
+	<h1>Welcome back <span th:text="${session.user.username}">default</span>! </h1>
+	<h2>Complete the form to create a new campaign.</h2>
+	<form th:action="@{/CreateCampaign}" method="POST">
+		Name: <input type="text" name="name" required> <br>
+		Customer: <input type="text" name ="customer" required> <br> 
+			<input type="submit" value="Create Campaign">
+	</form>
+	<br>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Campaign ID</th>
+				<th>Campaign Name</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="c : ${campaigns}" th:class="(${c.id} == ${id})? 'current'">
+				<td th:text="${c.id}"></td>
+				<td><a th:href="@{/GoToCampaignDetailsPage(id=${c.id})}">
+					<span th:text="${c.name}"></span></a></td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>
