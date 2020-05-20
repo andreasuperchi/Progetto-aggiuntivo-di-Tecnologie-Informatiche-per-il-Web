@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"><head>
+<meta charset="ISO-8859-1">
+<title>TIW Worker Home Page</title>
+</head>
+<body>
+	<div align="left">
+        <a th:href="@{/Logout}">Logout</a>
+    </div>
+    <div align="right">
+        <a th:href="@{/ChangePersonalInfo}">Change personal Info</a>
+    </div>
+	<h1>Welcome Back to Your Home Page</h1>
+	
+	<h1>These are Your Campaigns</h1>
+	
+	<table>
+		<tr>
+			<th> Id  </th>
+			<th> Name </th>
+		</tr>
+		<tr th:each = "c : $(submittedCampaigns)">
+			<td th:class="$(c.id)"></td>
+			<td th:class="$(c.name)"></td>
+		</tr>
+	</table>
+	
+	<table>
+		<tr>
+			<th> Id  </th>
+			<th> Name </th>
+		</tr>
+		<tr th:each = "c : $(availableCampaigns)">
+			<td th:class="$(c.id)"></td>
+			<td th:class="$(c.name)"></td>
+		</tr>
+	</table>
+</body>
+</html>

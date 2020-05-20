@@ -19,7 +19,7 @@ public class WorkerDAO {
 		this.id = id;
 	}
 
-	public List<Campaign> findSubmittedCampaign() throws SQLException {
+	public List<Campaign> findSubmittedCampaigns() throws SQLException {
 		List<Campaign> submittedCampaigns = new ArrayList<Campaign>();
 		String query = "SELECT * FROM worker_campaign WHERE id_worker  = ? ORDERED BY name ASC ";
 		
@@ -43,7 +43,7 @@ public class WorkerDAO {
 		return submittedCampaigns;
 	}
 
-	public List<Campaign> findAvailableCampaign() throws SQLException {
+	public List<Campaign> findAvailableCampaigns() throws SQLException {
 		List<Campaign> availableCampaigns = new ArrayList<Campaign>();
 		String query = "SELECT * FROM worker_campaign WHERE id_worker  != ? ORDERED BY name ASC ";
 		
