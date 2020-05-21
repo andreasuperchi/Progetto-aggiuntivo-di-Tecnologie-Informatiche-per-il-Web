@@ -1,8 +1,6 @@
 package it.polimi.tiw.project.dao;
 
-import java.sql.Blob;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,10 +12,16 @@ import it.polimi.tiw.project.beans.Image;
 
 public class CampaignDAO {
 	int id;
-	Connection connection;
+	private Connection connection;
+	
+	public CampaignDAO(Connection connection, int id) {
+		this.connection = connection;
+		this.id = id;
+	}
 
 	public void changeToActive() throws SQLException {
-		String query = "UPDATE campaign SET state='active' WHERE id = ? ";
+		String query = "UPDATE campaign SET state = 'active' WHERE id = ? ";
+		
 		try (PreparedStatement pstatement = connection.prepareStatement(query)) {
 			pstatement.setInt(1, id);
 			pstatement.executeQuery();
@@ -25,7 +29,7 @@ public class CampaignDAO {
 	}
 
 	public void changeToClose() throws SQLException {
-		String query = "UPDATE campaign SET state= 'close' WHERE id = ? ";
+		String query = "UPDATE campaign SET state = 'close' WHERE id = ? ";
 		
 		try (PreparedStatement pstatement = connection.prepareStatement(query)) {
 			pstatement.setInt(1, id);
@@ -36,16 +40,17 @@ public class CampaignDAO {
 
 	public List<Image> campaignImages() throws SQLException {
 		List<Image> campaignImages = new ArrayList<Image>();
-		String query = "SELECT * FROM image WHERE id_campaign= ? ORDERED BY name ASC";
+		String query = "SELECT * FROM image WHERE id_campaign = ?";
 
 		try (PreparedStatement pstatement = connection.prepareStatement(query)) {
-			pstatement.setInt(1, id);
+			pstatement.setInt(1, this.id);
 
 			try (ResultSet result = pstatement.executeQuery()) {
 				while (result.next()) {
 					Image image = new Image();
+					
 					image.setId(result.getInt("id"));
-					image.setPhoto(result.getBlob("photo"));
+					image.setPhoto(result.getString("photo"));
 					image.setLatitude(result.getFloat("latitude"));
 					image.setLongitude(result.getDouble("longitude"));
 					image.setCounty(result.getString("county"));
@@ -56,29 +61,28 @@ public class CampaignDAO {
 					image.setIdCampaign(result.getInt("id_campaign"));
 					
 					campaignImages.add(image);
-
 				}
 			}
 		}
 		return campaignImages;
 	}
 
-	public void addImage(Blob photo, double latitude, double longitude, String county, String municipality,
-			String source, Date date, String resolution) throws SQLException {
+	public void addImage(String photo, String latitude, String longitude, String county, String municipality,
+			String source, String date, String resolution) throws SQLException {
 		String query = "INSERT INTO image (photo, latitude, longitude, county, municipality, source, date, resolution, id_campaign) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ";
 
 		try (PreparedStatement pstatement = connection.prepareStatement(query)) {
-			pstatement.setBlob(1, photo);
-			pstatement.setDouble(2, latitude);
-			pstatement.setDouble(3, longitude);
+			pstatement.setString(1, photo);
+			pstatement.setString(2, latitude);
+			pstatement.setString(3, longitude);
 			pstatement.setString(4, county);
 			pstatement.setString(5, municipality);
 			pstatement.setString(6, source);
-			pstatement.setDate(7, date);
+			pstatement.setString(7, date);
 			pstatement.setString(8, resolution);
 			pstatement.setInt(9, this.id);
-
-			pstatement.executeQuery();
+			
+			pstatement.executeUpdate();
 		}
 	}
 

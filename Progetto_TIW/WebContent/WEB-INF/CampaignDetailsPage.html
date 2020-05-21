@@ -1,10 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>Campaign Details Page</title>
 </head>
 <body>
-
+	<div align="left">
+		<a th:href="@{/Logout}">Logout</a>
+	</div>
+	<div align="right">
+		<a th:href="@{/ChangePersonalInfo}">Change personal Info</a>
+	</div>
+	<h1>These are the details of the campaign with ID: <span th:text="${campaignID}"></span>.</h1> <br>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Thumbnail</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="i : ${images}">
+				<td><a th:href="@{/GoToImageDetailsPage(id=${i.id})}">
+					<img th:src="${i.photo}" width="200" height="200"></a></td>
+			</tr>
+		</tbody>
+	</table> <br>
+	<div>
+		<form th:action="@{/UploadImage(id=${campaignID})}" method="POST">
+		Photo: <input type="file" name="photo" required> <br>
+		Latitude: <input type="text" name="latitude" required> <br>
+		Longitude: <input type="text" name="longitude" required> <br>
+		County: <input type="text" name="county" required> <br>
+		Municipality: <input type="text" name="municipality" required> <br>
+		Source: <input type="text" name="source" required> <br>
+		Resolution: <select name="resolution" required>
+			<option value="high">High</option>
+			<option value="medium">Medium</option>
+			<option value="low">Low</option>
+			</select> <br>
+			<input type="submit" value="Upload Image">
+		</form>
+	</div>
 </body>
 </html>

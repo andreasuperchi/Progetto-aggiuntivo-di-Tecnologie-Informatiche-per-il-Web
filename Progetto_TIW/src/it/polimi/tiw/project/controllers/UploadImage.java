@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -14,18 +16,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import it.polimi.tiw.project.dao.UserDAO;
+import it.polimi.tiw.project.dao.CampaignDAO;
 
-@WebServlet("/RegisterUser")
-public class RegisterUser extends HttpServlet {
+@WebServlet("/UploadImage")
+public class UploadImage extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection;
-    
-    public RegisterUser() {
+	//private TemplateEngine templateEngine;
+	
+    public UploadImage() {
         super();
     }
     
-    public void init() throws ServletException {
+    public void init() throws ServletException {		
 		try {
 			ServletContext context = getServletContext();
 			String driver = context.getInitParameter("dbDriver");
@@ -47,27 +50,32 @@ public class RegisterUser extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String username = request.getParameter("username");
-		String password = request.getParameter("password");
-		String email = request.getParameter("email");
-		String experience = request.getParameter("experience");
+		int campaignId = Integer.parseInt(request.getParameter("id"));
+		
+		CampaignDAO cDAO = new CampaignDAO(connection, campaignId);
+		
+		Date date = new Date();
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		
 		File photo = new File(request.getParameter("photo"));
 		String photoPath = photo.getAbsolutePath();
 		
-		String role = request.getParameter("role");
-		
-		UserDAO userDAO = new UserDAO(connection);
+		String latitude = request.getParameter("latitude");
+		String longitude = request.getParameter("longitude");
+		String county = request.getParameter("county");
+		String municipality = request.getParameter("municipality");
+		String source = request.getParameter("source");
+		String finalDate = formatter.format(date);
+		String resolution = request.getParameter("resolution");
 		
 		try {
-			userDAO.addUser(username, password, email, experience, photoPath, role);
+			cDAO.addImage(photoPath, latitude, longitude, county, municipality, source, finalDate, resolution);
 		} catch(SQLException e) {
-			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Registration failure!");
+			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, e.getMessage());
 		}
 		
-		String loginPath = getServletContext().getContextPath() + "/index.html";
-		
-		response.sendRedirect(loginPath);	//reindirizzo l'utente appena registrato alla pagina di login
+		String path = "/Progetto_TIW/GoToCampaignDetailsPage?id=" + campaignId;
+		response.sendRedirect(path);
 	}
 
 }

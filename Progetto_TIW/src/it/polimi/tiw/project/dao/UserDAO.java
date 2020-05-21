@@ -1,6 +1,5 @@
 package it.polimi.tiw.project.dao;
 
-import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -37,7 +36,7 @@ public class UserDAO {
 		}
 	}
 
-	public void addUser(String username, String password, String email, String experience, Blob photo, String role)
+	public void addUser(String username, String password, String email, String experience, String photo, String role)
 			throws SQLException {
 		if (role.equals("manager")) {
 			String query = "INSERT INTO user (username, password, email, role) VALUES (?, ?, ?, ?)";
@@ -58,7 +57,7 @@ public class UserDAO {
 				pstatement.setString(2, password);
 				pstatement.setString(3, email);
 				pstatement.setString(4, experience);
-				pstatement.setBlob(5, photo);
+				pstatement.setString(5, photo);
 				pstatement.setString(6, role);
 
 				pstatement.executeUpdate();

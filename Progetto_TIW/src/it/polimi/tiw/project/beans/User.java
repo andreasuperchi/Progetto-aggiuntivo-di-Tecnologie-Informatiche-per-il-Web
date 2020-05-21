@@ -1,14 +1,12 @@
 package it.polimi.tiw.project.beans;
 
-import java.sql.Blob;
-
 public class User {
 	private int id;
 	private String username;
 	private String password;
 	private String email;
 	private String experience;
-	private Blob image;
+	private String image;
 	private String role;
 
 	public int getId() {
@@ -51,11 +49,11 @@ public class User {
 		this.experience = experience;
 	}
 
-	public Blob getImage() {
+	public String getImage() {
 		return image;
 	}
 
-	public void setImage(Blob image) {
+	public void setImage(String image) {
 		this.image = image;
 	}
 

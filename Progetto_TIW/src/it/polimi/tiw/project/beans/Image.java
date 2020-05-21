@@ -1,10 +1,10 @@
 package it.polimi.tiw.project.beans;
 
-import java.sql.*;
+import java.sql.Date;
 
 public class Image {
 	private int id;
-	private Blob photo;
+	private String photo;
 	private double latitude;
 	private double longitude;
 	private String county;
@@ -22,11 +22,11 @@ public class Image {
 		this.id = id;
 	}
 
-	public Blob getPhoto() {
+	public String getPhoto() {
 		return photo;
 	}
 
-	public void setPhoto(Blob photo) {
+	public void setPhoto(String photo) {
 		this.photo = photo;
 	}
 

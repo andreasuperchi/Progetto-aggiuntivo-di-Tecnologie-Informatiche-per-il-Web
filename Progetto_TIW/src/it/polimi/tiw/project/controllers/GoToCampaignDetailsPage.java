@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -15,10 +16,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import it.polimi.tiw.project.beans.Campaign;
+import it.polimi.tiw.project.beans.Image;
 import it.polimi.tiw.project.beans.User;
+import it.polimi.tiw.project.dao.CampaignDAO;
+import it.polimi.tiw.project.dao.ManagerDAO;
 
 @WebServlet("/GoToCampaignDetailsPage")
 public class GoToCampaignDetailsPage extends HttpServlet {
@@ -28,7 +34,6 @@ public class GoToCampaignDetailsPage extends HttpServlet {
        
     public GoToCampaignDetailsPage() {
         super();
-        // TODO Auto-generated constructor stub
     }
     
     public void init() throws ServletException {
@@ -56,15 +61,27 @@ public class GoToCampaignDetailsPage extends HttpServlet {
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		User userBean = null;
-		HttpSession session = request.getSession();
-		userBean = (User) session.getAttribute("user");
+		int campaignId = Integer.parseInt(request.getParameter("id"));
+		List<Image> images = null;
+		CampaignDAO cDAO = new CampaignDAO(connection, campaignId);
 		
+		try {
+			images = cDAO.campaignImages();
+		} catch (SQLException e) {
+			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Failure in accessing the images in the database!");
+		}
+		
+		String path = "/WEB-INF/CampaignDetailsPage.html";
+		ServletContext servletContext = getServletContext();
+		final WebContext context = new WebContext(request, response, servletContext, request.getLocale());
+		context.setVariable("campaignID", campaignId);
+		//context.setVariable("campaignName", request.getParameter("cname"));
+		context.setVariable("images", images);
+		
+		templateEngine.process(path, context, response.getWriter());
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-
 }
