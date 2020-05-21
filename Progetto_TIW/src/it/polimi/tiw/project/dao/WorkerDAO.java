@@ -21,7 +21,7 @@ public class WorkerDAO {
 
 	public List<Campaign> findSubmittedCampaigns() throws SQLException {
 		List<Campaign> submittedCampaigns = new ArrayList<Campaign>();
-		String query = "SELECT * FROM worker_campaign WHERE id_worker  = ? ORDERED BY name ASC ";
+		String query = "SELECT id, name, state, customer, id_manager FROM campaign AS c JOIN worker_campaign AS wc WHERE wc.id_worker = ? AND wc.id_campaign = c.id ";
 		
 		try (PreparedStatement pstatement = connection.prepareStatement(query)) {
 			pstatement.setInt(1, this.id);
@@ -42,10 +42,11 @@ public class WorkerDAO {
 		}
 		return submittedCampaigns;
 	}
+	
 
 	public List<Campaign> findAvailableCampaigns() throws SQLException {
-		List<Campaign> availableCampaigns = new ArrayList<Campaign>();
-		String query = "SELECT * FROM worker_campaign WHERE id_worker  != ? ORDERED BY name ASC ";
+		List<Campaign> submittedCampaigns = new ArrayList<Campaign>();
+		String query = "SELECT id, name, state, customer, id_manager FROM campaign AS c JOIN worker_campaign AS wc WHERE wc.id_worker = ? AND wc.id_campaign != c.id AND state = 'started'  ";
 		
 		try (PreparedStatement pstatement = connection.prepareStatement(query)) {
 			pstatement.setInt(1, this.id);
@@ -53,18 +54,22 @@ public class WorkerDAO {
 			try (ResultSet result = pstatement.executeQuery()) {
 				while (result.next()) {
 					Campaign campaign = new Campaign();
+					
 					campaign.setId(result.getInt("id"));
 					campaign.setName(result.getString("name"));
 					campaign.setState(result.getString("state"));
 					campaign.setCustomer(result.getString("customer"));
 					campaign.setIdManager(result.getInt("id_manager"));
 					
-					availableCampaigns.add(campaign);
+					submittedCampaigns.add(campaign);
 				}
 			}
 		}
-		return availableCampaigns;
-	}
+		return submittedCampaigns;
+	}	
+	
+
+
 
 	public void submitCampaign(int id_campaign) throws SQLException {
 		String query = "INSERT into worker_campaign (id_worker, id_campaign) VALUES (?, ?)";

@@ -25,7 +25,7 @@ import it.polimi.tiw.project.beans.User;
 import it.polimi.tiw.project.dao.WorkerDAO;
 
 
-@WebServlet("/GetToHomeWorker")
+@WebServlet("/GoToHomeWorker")
 public class GoToHomeWorker extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private Connection connection = null;
