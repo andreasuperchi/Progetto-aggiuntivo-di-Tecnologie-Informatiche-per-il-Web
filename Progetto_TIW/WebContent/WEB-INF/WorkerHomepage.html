@@ -14,7 +14,7 @@
 	<h1>Welcome Back to Your Home Page</h1>
 	
 	<h1>These are Your Campaigns</h1>
-	<table>
+	<table border = "1">
 		<tr>
 			<th> Id  </th>
 			<th> Name </th>
@@ -25,7 +25,7 @@
 		</tr>
 	</table>
 	<h1>You can Join these campaigns</h1>
-	<table>
+	<table border = "1">
 		<thead>
 		<tr>
 			<th> Id  </th>
@@ -33,6 +33,12 @@
 		</tr>
 		</thead>
 		<tbody>
+		<tr th:each = "c : ${availableCampaigns}" th:class="(${c.id} == ${id})? 'current'">
+			<td th:text="${c.id}"></td>
+			<td th:text="${c.name}"></td>
+			<td> <form th:action = "@{SubmitCampaign(id=${c.id})}" method = "POST"><input type = "submit" name= "submitCammpaigns" value = "Submit"></input></form></td>
+		</tr>
+		</tbody>
 	</table>
 </body>
 </html>
