@@ -46,7 +46,7 @@ public class WorkerDAO {
 
 	public List<Campaign> findAvailableCampaigns() throws SQLException {
 		List<Campaign> submittedCampaigns = new ArrayList<Campaign>();
-		String query = "SELECT id, name, state, customer, id_manager FROM campaign AS c JOIN worker_campaign AS wc WHERE wc.id_worker = ? AND wc.id_campaign != c.id AND state = 'started'  ";
+		String query = "select * from campaign where state = 'started' and id not in (select id_campaign from worker_campaign where id_worker = ?)";
 		
 		try (PreparedStatement pstatement = connection.prepareStatement(query)) {
 			pstatement.setInt(1, this.id);
@@ -72,7 +72,7 @@ public class WorkerDAO {
 
 
 	public void submitCampaign(int id_campaign) throws SQLException {
-		String query = "INSERT into worker_campaign (id_worker, id_campaign) VALUES (?, ?)";
+		String query = "INSERT INTO worker_campaign (id_worker, id_campaign) VALUES (?, ?)";
 		
 		try (PreparedStatement pstatement = connection.prepareStatement(query)) {
 			pstatement.setInt(1, id);
