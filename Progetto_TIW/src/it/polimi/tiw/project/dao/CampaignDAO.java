@@ -123,5 +123,31 @@ public class CampaignDAO {
 		}
 		return stats;
 	}
-
+	
+	public Image getImage(int imageID) throws SQLException {
+		Image image = new Image();
+		String query = "SELECT * FROM image WHERE id = ? AND id_campaign = ?";
+		
+		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+			pstatement.setInt(1, imageID);
+			pstatement.setInt(2, this.id);
+			
+			try (ResultSet result = pstatement.executeQuery()) {
+				while(result.next()) {
+					image.setId(result.getInt("id"));
+					image.setPhoto(result.getString("photo"));
+					image.setLatitude(result.getFloat("latitude"));
+					image.setLongitude(result.getDouble("longitude"));
+					image.setCounty(result.getString("county"));
+					image.setMunicipality(result.getString("municipality"));
+					image.setSource(result.getString("source"));
+					image.setDate(result.getDate("date"));
+					image.setResolution(result.getString("resolution"));
+					image.setIdCampaign(result.getInt("id_campaign"));
+				}
+			}
+		}
+		
+		return image;
+	}
 }

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Image Details</title>
+</head>
+<body>
+	<div align="left">
+		<a th:href="@{/Logout}">Logout</a>
+		<div align="right">
+			<a th:href="@{/ChangePersonalInfo}">Change personal Info</a>
+		</div>
+	</div>
+	<h1 align="center">Here are the details of the image with ID: <span th:text="${image.id}"></span>.</h1>
+	<div align="center"><img th:src="${image.photo}"><br></div>
+	<div align="left">
+		<h2>
+			Latitude:<span th:text="${image.latitude}"></span><br>
+			Longitude: <span th:text="${image.longitude}"></span><br>
+			County: <span th:text="${image.county}"></span><br>
+			Municipality: <span th:text="${image.municipality}"></span><br>
+			Source: <span th:text="${image.source}"></span><br>
+			Date: <span th:text="${image.date}"></span><br>
+			Resolution: <span th:text="${image.resolution}"></span><br>
+		</h2>
+		<div align="right">
+			<form th:action="@{/AddAnnotation(imageID=${image.id})}" method="post">
+				Validity: <select name="validity" required>
+					<option value="true">True</option>
+					<option value="false">False</option>
+				</select> <br>
+				Trust: <select name="trust" required>
+					<option value="true">High</option>
+					<option value="medium">Medium</option>
+					<option value="low">Low</option>
+				</select> <br>
+				Note: <input type="text" name="note"> <br>
+					<input type="submit" value="Add Annotation">
+			</form>
+		</div>
+	</div>
+</body>
+</html>

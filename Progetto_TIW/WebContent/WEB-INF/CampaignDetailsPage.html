@@ -22,7 +22,7 @@
 	<table>
 		<tbody>
 				<tr th:each="i : ${images}">
-					<td><a th:href="@{/GoToImageDetailsPage(id=${i.id})}">
+					<td><a th:href="@{/GoToImageDetailsPage(id=${i.id}, idCampaign=${campaign.id})}">
 						<img th:src="${i.photo}" width="200" height="200"></a></td>
 				</tr>	
 		</tbody>

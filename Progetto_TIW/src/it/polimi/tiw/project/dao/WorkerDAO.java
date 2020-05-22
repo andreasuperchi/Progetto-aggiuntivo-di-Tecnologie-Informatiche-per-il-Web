@@ -46,7 +46,7 @@ public class WorkerDAO {
 
 	public List<Campaign> findAvailableCampaigns() throws SQLException {
 		List<Campaign> submittedCampaigns = new ArrayList<Campaign>();
-		String query = "select * from campaign where state = 'started' and id not in (select id_campaign from worker_campaign where id_worker = ?)";
+		String query = "SELECT * FROM campaign WHERE state = 'started' AND id NOT IN (SELECT id_campaign FROM worker_campaign WHERE id_worker = ?)";
 		
 		try (PreparedStatement pstatement = connection.prepareStatement(query)) {
 			pstatement.setInt(1, this.id);
