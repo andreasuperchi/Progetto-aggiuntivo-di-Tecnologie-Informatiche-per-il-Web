@@ -1,10 +1,10 @@
 package it.polimi.tiw.project.beans;
 
-import java.sql.Date;
+
 
 public class Annotation {
 	private int id;
-	private Date creationDate;
+	private String creationDate;
 	private String validity;
 	private String trust;
 	private String note;
@@ -18,11 +18,11 @@ public class Annotation {
 		this.id = id;
 	}
 
-	public Date getCreationDate() {
+	public String getCreationDate() {
 		return creationDate;
 	}
 
-	public void setCreationDate(Date creationDate) {
+	public void setCreationDate(String creationDate) {
 		this.creationDate = creationDate;
 	}
 

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Campaign Stats Page </title>
+</head>
+<body>
+	<div align="left">
+		<a th:href="@{/Logout}">Logout</a>
+	</div>
+	<div align="right">
+		<a href="/Progetto_TIW/ChangeInfo.html">Change personal Info</a>
+	</div>
+	<h1>These are the statistics of the campaign whit ID: <span th:text="${campaignID}"></span></h1>
+	<div align="center">
+		<h2>Number of Images: "<span th:text="${campaignStats.numberOfImages}"></span>"</h2> <p align="right">
+		<h2>Number of Annotations: "<span th:text="${campaignStats.numberOfannotations}"></span>"</h2> <p align="right">
+		<h2>Annotation Per Image: "<span th:text="${campaignStats.averageAnnotationsPerImage}"></span>"</h2>
+		<h2>Conflictual Annotation <span th:text="${campaignStats.conflictualAnnotations></span></h2>
+	</div>
+</body>
+</html>
