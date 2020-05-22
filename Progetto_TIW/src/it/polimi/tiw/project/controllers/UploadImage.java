@@ -22,7 +22,6 @@ import it.polimi.tiw.project.dao.CampaignDAO;
 public class UploadImage extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection;
-	//private TemplateEngine templateEngine;
 	
     public UploadImage() {
         super();

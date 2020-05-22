@@ -57,31 +57,66 @@ public class ManagerDAO {
 			pstatement.executeUpdate(); // eseguo l'inserimento della campagna nel db
 		}
 	}
+	
+	public Campaign getCampaign(int id) throws SQLException {
+		String query = "SELECT * FROM campaign WHERE id_manager = ? AND id = ?";
+		Campaign campaign = new Campaign();
+		
+		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+			pstatement.setInt(1, this.id);
+			pstatement.setInt(2, id);
+			
+			try (ResultSet result = pstatement.executeQuery();) {
+				while (result.next()) {
+					campaign.setId(result.getInt("id"));
+					campaign.setName(result.getString("name"));
+					campaign.setState(result.getString("state"));
+					campaign.setCustomer(result.getString("customer"));
+					campaign.setIdManager(result.getInt("id_manager"));
+				}
+			}
+		}
+		
+		return campaign;
+	}
 
-	public void changeUsername(String username) throws SQLException {
-		String query = "UPDATE user SET username = ? WHERE id = ?";
-		try (PreparedStatement pstatement = connection.prepareStatement(query)) {
+//	public void changeUsername(String username) throws SQLException {
+//		String query = "UPDATE user SET username = ? WHERE id = ?";
+//		try (PreparedStatement pstatement = connection.prepareStatement(query)) {
+//			pstatement.setString(1, username);
+//			pstatement.setInt(2, id);
+//			pstatement.executeUpdate();
+//		}
+//	}
+//
+//	public void changePassword(String password) throws SQLException {
+//		String query = "UPDATE user SET password = ? where id =?";
+//		try (PreparedStatement pstatement = connection.prepareStatement(query)) {
+//			pstatement.setString(1, password);
+//			pstatement.setInt(2, id);
+//			pstatement.executeUpdate();
+//		}
+//	}
+//
+//	public void changeEmail(String email) throws SQLException {
+//		String query = "UPDATE user SET email = ? where id =?";
+//		try (PreparedStatement pstatement = connection.prepareStatement(query)) {
+//			pstatement.setString(1, email);
+//			pstatement.setInt(2, id);
+//			pstatement.executeUpdate();
+//		}
+//	}
+	
+	public void changeInfo(String username, String password, String email) throws SQLException {
+		String query = "UPDATE user SET username = ?, password = ?, email = ? WHERE id = ?";
+		
+		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setString(1, username);
-			pstatement.setInt(2, id);
+			pstatement.setString(2, password);
+			pstatement.setString(3, email);
+			pstatement.setInt(4, this.id);
+			
 			pstatement.executeUpdate();
-		}
-	}
-
-	public void changePassword(String password) throws SQLException {
-		String query = "UPDATE user SET password = ? where id =?";
-		try (PreparedStatement pstatement = connection.prepareStatement(query)) {
-			pstatement.setString(1, password);
-			pstatement.setInt(2, id);
-			pstatement.executeUpdate();
-		}
-	}
-
-	public void changeEmail(String email) throws SQLException {
-		String query = "UPDATE user SET email = ? where id =?";
-		try (PreparedStatement pstatement = connection.prepareStatement(query)) {
-			pstatement.setString(1, email);
-			pstatement.setInt(2, id);
-			pstatement.executeUpdate();
-		}
+		} 
 	}
 }

@@ -20,21 +20,22 @@ public class CampaignDAO {
 	}
 
 	public void changeToActive() throws SQLException {
-		String query = "UPDATE campaign SET state = 'active' WHERE id = ? ";
-		
-		try (PreparedStatement pstatement = connection.prepareStatement(query)) {
-			pstatement.setInt(1, id);
-			pstatement.executeQuery();
-		}
-	}
-
-	public void changeToClose() throws SQLException {
-		String query = "UPDATE campaign SET state = 'close' WHERE id = ? ";
+		String query = "UPDATE campaign SET state = 'started' WHERE id = ?";
 		
 		try (PreparedStatement pstatement = connection.prepareStatement(query)) {
 			pstatement.setInt(1, id);
 			
-			pstatement.executeQuery();
+			pstatement.executeUpdate();
+		}
+	}
+
+	public void changeToClosed() throws SQLException {
+		String query = "UPDATE campaign SET state = 'closed' WHERE id = ? ";
+		
+		try (PreparedStatement pstatement = connection.prepareStatement(query)) {
+			pstatement.setInt(1, id);
+			
+			pstatement.executeUpdate();
 		}
 	}
 

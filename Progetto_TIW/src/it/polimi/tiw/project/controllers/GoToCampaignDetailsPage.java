@@ -63,6 +63,12 @@ public class GoToCampaignDetailsPage extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int campaignId = Integer.parseInt(request.getParameter("id"));
 		List<Image> images = null;
+		Campaign campaignBean = null;
+		
+		HttpSession session = request.getSession();
+		User userBean = (User) session.getAttribute("user");
+		
+		ManagerDAO mDAO = new ManagerDAO(connection, userBean.getId());
 		CampaignDAO cDAO = new CampaignDAO(connection, campaignId);
 		
 		try {
@@ -71,11 +77,16 @@ public class GoToCampaignDetailsPage extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Failure in accessing the images in the database!");
 		}
 		
+		try {
+			campaignBean = mDAO.getCampaign(campaignId);
+		} catch (SQLException e) {
+			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Failure in accessing the campaign in the database!");
+		}
+		
 		String path = "/WEB-INF/CampaignDetailsPage.html";
 		ServletContext servletContext = getServletContext();
 		final WebContext context = new WebContext(request, response, servletContext, request.getLocale());
-		context.setVariable("campaignID", campaignId);
-		//context.setVariable("campaignName", request.getParameter("cname"));
+		context.setVariable("campaign", campaignBean);
 		context.setVariable("images", images);
 		
 		templateEngine.process(path, context, response.getWriter());

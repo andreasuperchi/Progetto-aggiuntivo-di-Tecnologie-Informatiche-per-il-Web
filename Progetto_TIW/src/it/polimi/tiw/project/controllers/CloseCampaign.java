@@ -12,17 +12,15 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import it.polimi.tiw.project.beans.User;
-import it.polimi.tiw.project.dao.ManagerDAO;
+import it.polimi.tiw.project.dao.CampaignDAO;
 
-@WebServlet("/CreateCampaign")
-public class CreateCampaign extends HttpServlet {
+@WebServlet("/CloseCampaign")
+public class CloseCampaign extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private Connection connection = null;
-       
-    public CreateCampaign() {
+	private Connection connection;
+
+    public CloseCampaign() {
         super();
     }
     
@@ -44,41 +42,21 @@ public class CreateCampaign extends HttpServlet {
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		int cID = Integer.parseInt(request.getParameter("id"));
+		CampaignDAO cDAO = new CampaignDAO(connection, cID);
+		
+		try {
+			cDAO.changeToClosed();
+		} catch (SQLException e) {
+			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Failure changing the state of the campaign!");
+		}
+		
+		String path = "/Progetto_TIW/GoToCampaignDetailsPage?id=" + cID;
+		response.sendRedirect(path);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		User userBean = null;
-		HttpSession session = request.getSession();	//salvo la sessione
-		
-		userBean = (User) session.getAttribute("user");
-		String campaignName = request.getParameter("name");
-		String customer = request.getParameter("customer");
-		
-		if (campaignName == null || customer == null) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing required informations!");
-		}
-		
-		int userID = userBean.getId();
-		ManagerDAO manDAO = new ManagerDAO(connection, userID);
-		
-		try {
-			manDAO.createCampaign(campaignName, customer);
-		} catch (SQLException e) {
-			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "There was an error in the creation of the campaign!");
-		}
-		
-		String path = "/Progetto_TIW/GoToHomeManager";
-		response.sendRedirect(path);
+		doGet(request, response);
 	}
-	
-	public void destroy() {
-		try {
-			if (connection != null) {
-				connection.close();
-			}
-		} catch (SQLException e) {
-			
-		}
-	}
+
 }

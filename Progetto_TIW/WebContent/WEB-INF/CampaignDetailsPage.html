@@ -11,18 +11,20 @@
 	<div align="right">
 		<a th:href="@{/ChangePersonalInfo}">Change personal Info</a>
 	</div>
-	<h1>These are the details of the campaign with ID: <span th:text="${campaignID}"></span>.</h1> <br>
-	<table border="1">
-		<thead>
-			<tr>
-				<th>Thumbnail</th>
-			</tr>
-		</thead>
+	<h1>These are the details of the campaign with ID: <span th:text="${campaign.id}"></span>.</h1> <br>
+	<div align="center">
+		<h2>Name: "<span th:text="${campaign.name}"></span>"</h2> <p align="right">
+			<a th:href="@{/StartCampaign(id=${campaign.id})}" >Start Campaign</a></p>
+		<h2>State: "<span th:text="${campaign.state}"></span>"</h2> <p align="right">
+			<a th:href="@{/CloseCampaign(id=${campaign.id})}">Close Campaign</a></p>
+		<h2>Customer: "<span th:text="${campaign.customer}"></span>"</h2>
+	</div>
+	<table>
 		<tbody>
-			<tr th:each="i : ${images}">
-				<td><a th:href="@{/GoToImageDetailsPage(id=${i.id})}">
-					<img th:src="${i.photo}" width="200" height="200"></a></td>
-			</tr>
+				<tr th:each="i : ${images}">
+					<td><a th:href="@{/GoToImageDetailsPage(id=${i.id})}">
+						<img th:src="${i.photo}" width="200" height="200"></a></td>
+				</tr>	
 		</tbody>
 	</table> <br>
 	<div>

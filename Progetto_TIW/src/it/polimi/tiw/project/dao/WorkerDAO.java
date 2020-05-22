@@ -135,5 +135,20 @@ public class WorkerDAO {
 			pstatement.executeUpdate();
 		}
 	}
+	
+	public void changeInfo(String username, String password, String email, String experience, String photo) throws SQLException {
+		String query = "UPDATE user SET username = ?, password = ?, email = ?, experience = ?, photo = ? WHERE id = ?";
+		
+		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+			pstatement.setString(1, username);
+			pstatement.setString(2, password);
+			pstatement.setString(3, email);
+			pstatement.setString(4, experience);
+			pstatement.setString(5, photo);
+			pstatement.setInt(6, this.id);
+			
+			pstatement.executeUpdate();
+		} 
+	}
 
 }
