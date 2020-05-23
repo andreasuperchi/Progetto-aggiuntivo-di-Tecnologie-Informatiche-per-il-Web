@@ -28,7 +28,7 @@
 		</tbody>
 	</table> <br>
 	<div>
-		<form th:action="@{/UploadImage(id=${campaignID})}" method="POST">
+		<form th:action="@{/UploadImage(id=${campaign.id})}" method="POST">
 		Photo: <input type="file" name="photo" required> <br>
 		Latitude: <input type="text" name="latitude" required> <br>
 		Longitude: <input type="text" name="longitude" required> <br>

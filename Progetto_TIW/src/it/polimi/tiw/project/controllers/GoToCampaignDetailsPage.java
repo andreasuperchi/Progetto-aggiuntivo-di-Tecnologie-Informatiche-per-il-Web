@@ -13,7 +13,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -22,9 +21,8 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import it.polimi.tiw.project.beans.Campaign;
 import it.polimi.tiw.project.beans.Image;
-import it.polimi.tiw.project.beans.User;
 import it.polimi.tiw.project.dao.CampaignDAO;
-import it.polimi.tiw.project.dao.ManagerDAO;
+import it.polimi.tiw.project.dao.UserDAO;
 
 @WebServlet("/GoToCampaignDetailsPage")
 public class GoToCampaignDetailsPage extends HttpServlet {
@@ -65,10 +63,7 @@ public class GoToCampaignDetailsPage extends HttpServlet {
 		List<Image> images = null;
 		Campaign campaignBean = null;
 		
-		HttpSession session = request.getSession();
-		User userBean = (User) session.getAttribute("user");
-		
-		ManagerDAO mDAO = new ManagerDAO(connection, userBean.getId());
+		UserDAO uDAO = new UserDAO(connection);
 		CampaignDAO cDAO = new CampaignDAO(connection, campaignId);
 		
 		try {
@@ -78,7 +73,7 @@ public class GoToCampaignDetailsPage extends HttpServlet {
 		}
 		
 		try {
-			campaignBean = mDAO.getCampaign(campaignId);
+			campaignBean = uDAO.getCampaign(campaignId);
 		} catch (SQLException e) {
 			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Failure in accessing the campaign in the database!");
 		}

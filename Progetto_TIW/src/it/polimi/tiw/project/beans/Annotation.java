@@ -9,6 +9,7 @@ public class Annotation {
 	private String trust;
 	private String note;
 	private int idImage;
+	private int idWorker;
 
 	public int getId() {
 		return id;
@@ -57,4 +58,13 @@ public class Annotation {
 	public void setIdImage(int idImage) {
 		this.idImage = idImage;
 	}
+
+	public int getIdWorker() {
+		return idWorker;
+	}
+
+	public void setIdWorker(int idWorker) {
+		this.idWorker = idWorker;
+	}
+	
 }

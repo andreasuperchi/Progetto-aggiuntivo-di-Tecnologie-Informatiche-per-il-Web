@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -18,8 +19,10 @@ import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import it.polimi.tiw.project.beans.Annotation;
 import it.polimi.tiw.project.beans.Image;
 import it.polimi.tiw.project.dao.CampaignDAO;
+import it.polimi.tiw.project.dao.ImageDAO;
 
 @WebServlet("/GoToImageDetailsPage")
 public class GoToImageDetailsPage extends HttpServlet {
@@ -60,7 +63,9 @@ public class GoToImageDetailsPage extends HttpServlet {
 		int imageID = Integer.parseInt(request.getParameter("id"));
 		int campaignID = Integer.parseInt(request.getParameter("idCampaign"));
 		Image image = null;
+		List<Annotation> annotations = null;
 		CampaignDAO cDAO = new CampaignDAO(connection, campaignID);
+		ImageDAO iDAO = new ImageDAO(connection, imageID);
 		
 		try {
 			image = cDAO.getImage(imageID);
@@ -68,9 +73,16 @@ public class GoToImageDetailsPage extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Loading Error!");
 		}
 		
+		try {
+			annotations = iDAO.findAnnotations();
+		} catch (SQLException e) {
+			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Loading Error!");
+		}
+	
 		String path = "/WEB-INF/ImageDetailsPage.html";
 		ServletContext servletContext = getServletContext();
 		final WebContext context = new WebContext(request, response, servletContext, request.getLocale());
+		context.setVariable("annotations", annotations);
 		context.setVariable("image", image);
 		
 		templateEngine.process(path, context, response.getWriter());

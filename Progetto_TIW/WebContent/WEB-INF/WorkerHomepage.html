@@ -15,15 +15,19 @@
 	
 	<h1>These are Your Campaigns</h1>
 	<table border = "1">
-		<tr>
-			<th> Id  </th>
-			<th> Name </th>
-		</tr>
-		<tr th:each = "c : ${submittedCampaigns}" th:class="(${c.id} == ${id})? 'current'">
-			<td th:text="${c.id}"></td>
-			<td><a th:href="@{/GoToCampaignDetailsPage(id=${c.id})}">
+		<thead>
+			<tr>
+				<th> Id  </th>
+				<th> Name </th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="c : ${submittedCampaigns}" th:class="(${c.id} == ${id})? 'current'">
+				<td th:text="${c.id}"></td>
+				<td><a th:href="@{/GoToCampaignDetailsPage(id=${c.id})}">
 					<span th:text="${c.name}"></span></a></td>
-		</tr>
+			</tr>
+		</tbody>
 	</table>
 	<h1>You can Join these campaigns</h1>
 	<table border = "1">

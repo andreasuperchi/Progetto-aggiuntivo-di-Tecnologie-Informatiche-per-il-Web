@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import it.polimi.tiw.project.beans.Campaign;
 import it.polimi.tiw.project.beans.User;
 
 public class UserDAO {
@@ -63,6 +64,27 @@ public class UserDAO {
 				pstatement.executeUpdate();
 			}
 		}
+	}
+	
+	public Campaign getCampaign(int id) throws SQLException {
+		String query = "SELECT * FROM campaign WHERE id = ?";
+		Campaign campaign = new Campaign();
+		
+		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+			pstatement.setInt(1, id);
+			
+			try (ResultSet result = pstatement.executeQuery();) {
+				while (result.next()) {
+					campaign.setId(result.getInt("id"));
+					campaign.setName(result.getString("name"));
+					campaign.setState(result.getString("state"));
+					campaign.setCustomer(result.getString("customer"));
+					campaign.setIdManager(result.getInt("id_manager"));
+				}
+			}
+		}
+		
+		return campaign;
 	}
 
 }

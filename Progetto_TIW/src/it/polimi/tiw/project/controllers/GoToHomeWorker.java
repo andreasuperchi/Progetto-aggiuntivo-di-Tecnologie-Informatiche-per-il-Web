@@ -58,12 +58,8 @@ public class GoToHomeWorker extends HttpServlet {
 	
     public GoToHomeWorker() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		User user = null;
 		HttpSession session = request.getSession();

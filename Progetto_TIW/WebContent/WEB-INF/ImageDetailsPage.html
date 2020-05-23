@@ -24,13 +24,13 @@
 			Resolution: <span th:text="${image.resolution}"></span><br>
 		</h2>
 		<div align="right">
-			<form th:action="@{/AddAnnotation(imageID=${image.id})}" method="post">
+			<form th:action="@{/AddAnnotation(imageID=${image.id}, cID=${image.idCampaign})}" method="post">
 				Validity: <select name="validity" required>
 					<option value="true">True</option>
 					<option value="false">False</option>
 				</select> <br>
 				Trust: <select name="trust" required>
-					<option value="true">High</option>
+					<option value="high">High</option>
 					<option value="medium">Medium</option>
 					<option value="low">Low</option>
 				</select> <br>
@@ -39,5 +39,24 @@
 			</form>
 		</div>
 	</div>
+	
+	<table>
+		<thead>
+			<th>Creation Date</th>
+			<th>Validity</th>
+			<th>Trust</th>
+			<th>Note</th>
+			<th>ID Worker</th>
+		</thead>
+		<tbody>
+				<tr th:each="a : ${annotations}">
+					<td><span th:text="${a.creationDate}"></span></td>
+					<td><span th:text="${a.validity}"></span></td>
+					<td><span th:text="${a.trust}"></span></td>
+					<td><span th:text="${a.note}"></span></td>
+					<td><span th:text="${a.idWorker}"></span></td>
+				</tr>	
+		</tbody>
+	</table> <br>
 </body>
 </html>

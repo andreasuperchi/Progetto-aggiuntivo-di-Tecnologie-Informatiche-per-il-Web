@@ -19,18 +19,33 @@ public class ImageDAO {
 		this.id = id;
 	}
 
-	public void addAnnotation(String creationDate, String validity, String trust, String note, int id_worker)
-			throws SQLException {
+//	public void addAnnotation(String creationDate, String validity, String trust, String note, int id_image, int id_worker)
+//			throws SQLException {
+//		String query = "INSERT INTO annotation (creation_date, validity, trust, note, id_image, id_worker) VALUES (?, ?, ?, ?, ?, ?)";
+//
+//		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+//			pstatement.setString(1, creationDate);
+//			pstatement.setString(2, validity);
+//			pstatement.setString(3, trust);
+//			pstatement.setString(4, note);
+//			pstatement.setInt(5, this.id);
+//			pstatement.setInt(6, id_worker);
+//
+//			pstatement.executeUpdate();
+//		}
+//	}
+	
+	public void addAnnotation(String creationDate, String validity, String trust, String note, int id_image, int id_worker) throws SQLException {
 		String query = "INSERT INTO annotation (creation_date, validity, trust, note, id_image, id_worker) VALUES (?, ?, ?, ?, ?, ?)";
-
+		
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setString(1, creationDate);
 			pstatement.setString(2, validity);
 			pstatement.setString(3, trust);
 			pstatement.setString(4, note);
-			pstatement.setInt(5, this.id);
+			pstatement.setInt(5, id_image);
 			pstatement.setInt(6, id_worker);
-
+			
 			pstatement.executeUpdate();
 		}
 	}
@@ -53,6 +68,7 @@ public class ImageDAO {
 					annotation.setTrust(result.getString("trust"));
 					annotation.setNote(result.getString("note"));
 					annotation.setIdImage(result.getInt("id_image"));
+					annotation.setIdWorker(result.getInt("id_worker"));
 
 					annotations.add(annotation);
 				}

@@ -146,6 +146,8 @@ public class CampaignDAO {
 					image.setIdCampaign(result.getInt("id_campaign"));
 				}
 			}
+			
+			
 		}
 		
 		return image;
