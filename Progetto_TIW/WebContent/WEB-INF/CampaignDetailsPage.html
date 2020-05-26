@@ -9,14 +9,18 @@
 		<a th:href="@{/Logout}">Logout</a>
 	</div>
 	<div align="right">
-		<a href="/Progetto_TIW/ChangeInfo.html">Change personal Info</a>
+		<a th:href="@{/GoToChangeInfo}">Change personal Info</a>
 	</div>
 	<h1>These are the details of the campaign with ID: <span th:text="${campaign.id}"></span>.</h1> <br>
 	<div align="center">
-		<h2>Name: "<span th:text="${campaign.name}"></span>"</h2> <p align="right">
-			<a th:href="@{/StartCampaign(id=${campaign.id})}" >Start Campaign</a></p>
-		<h2>State: "<span th:text="${campaign.state}"></span>"</h2> <p align="right">
-			<a th:href="@{/CloseCampaign(id=${campaign.id})}">Close Campaign</a></p>
+		<h2>Name: "<span th:text="${campaign.name}"></span>"</h2>
+		<div align="right" th:switch="${session.user.role}">
+			<a th:case="'manager'" th:href="@{/StartCampaign(id=${campaign.id})}" >Start Campaign</a>
+		</div>
+		<h2>State: "<span th:text="${campaign.state}"></span>"</h2> 
+		<div align="right" th:switch="${session.user.role}">
+			<a th:case="'manager'" th:href="@{/CloseCampaign(id=${campaign.id})}">Close Campaign</a>
+		</div>
 		<h2>Customer: "<span th:text="${campaign.customer}"></span>"</h2>
 	</div>
 	<table>
@@ -43,8 +47,8 @@
 				<input type="submit" value="Upload Image">
 			</form>
 	</div>
-	<div align="right">
-		<a th:href="@{/CreateStats(id=${campaign.id})}">Statistics</a>
+	<div align="right" th:switch="${session.user.role}">
+		<a th:case="'manager'" th:href="@{/CreateStats(id=${campaign.id})}">Statistics</a>
 	</div>
 </body>
 </html>

@@ -9,7 +9,7 @@
 		<a th:href="@{/Logout}">Logout</a>
 	</div>
 	<div align="right">
-		<a href="/Progetto_TIW/ChangeInfo.html">Change personal Info</a>
+		<a th:href="@{/GoToChangeInfo}">Change personal Info</a>
 	</div>
 	<h1 align="center">Here are the details of the image with ID: <span th:text="${image.id}"></span>.</h1>
 	<div align="center"><img th:src="${image.photo}"><br></div>

@@ -41,7 +41,6 @@
   		<url-pattern>/GoToHomeWorker</url-pattern>
   		<url-pattern>/GoToImageDetailsPage</url-pattern>
   		<url-pattern>/Logout</url-pattern>
-  		<url-pattern>/RegisterUser</url-pattern>
   		<url-pattern>/StartCampaign</url-pattern>
   		<url-pattern>/SubmitCampaign</url-pattern>
   		<url-pattern>/UploadImage</url-pattern>
