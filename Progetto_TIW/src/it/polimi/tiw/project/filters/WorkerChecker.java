@@ -14,16 +14,15 @@ import javax.servlet.http.HttpSession;
 
 import it.polimi.tiw.project.beans.User;
 
-
 @WebFilter("/WorkerChecker")
 public class WorkerChecker implements Filter {
 
-    /**
-     * Default constructor. 
-     */
-    public WorkerChecker() {
-        // TODO Auto-generated constructor stub
-    }
+	/**
+	 * Default constructor.
+	 */
+	public WorkerChecker() {
+		// TODO Auto-generated constructor stub
+	}
 
 	/**
 	 * @see Filter#destroy()
@@ -35,17 +34,18 @@ public class WorkerChecker implements Filter {
 	/**
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+			throws IOException, ServletException {
 		System.out.println("Worker Checker filter executing... \n");
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
 		String loginpath = httpRequest.getServletContext().getContextPath() + "/index.html";
 		HttpSession session = httpRequest.getSession();
 		User user = null;
-		
+
 		user = (User) session.getAttribute("user");
-		
-		if(!user.getRole().equals("worker")) {
+
+		if (!user.getRole().equals("worker")) {
 			httpResponse.sendRedirect(loginpath);
 			return;
 		}

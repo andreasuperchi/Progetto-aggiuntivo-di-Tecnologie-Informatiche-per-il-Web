@@ -24,16 +24,16 @@ import it.polimi.tiw.project.beans.Campaign;
 import it.polimi.tiw.project.beans.User;
 import it.polimi.tiw.project.dao.WorkerDAO;
 
-
 @WebServlet("/GoToHomeWorker")
 public class GoToHomeWorker extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    private Connection connection = null;
-    TemplateEngine templateEngine;
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-	
+	private Connection connection = null;
+	TemplateEngine templateEngine;
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+
 	public void init() throws ServletException {
 		ServletContext servletContext = getServletContext();
 		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
@@ -41,6 +41,7 @@ public class GoToHomeWorker extends HttpServlet {
 		this.templateEngine = new TemplateEngine();
 		this.templateEngine.setTemplateResolver(templateResolver);
 		templateResolver.setSuffix(".html");
+
 		try {
 			ServletContext context = getServletContext();
 			String driver = context.getInitParameter("dbDriver");
@@ -49,43 +50,46 @@ public class GoToHomeWorker extends HttpServlet {
 			String password = context.getInitParameter("dbPassword");
 			Class.forName(driver);
 			connection = DriverManager.getConnection(url, user, password);
+
 		} catch (ClassNotFoundException e) {
 			throw new UnavailableException("Can't load database driver");
 		} catch (SQLException e) {
 			throw new UnavailableException("Couldn't get db connection");
 		}
 	}
-	
-    public GoToHomeWorker() {
-        super();
-    }
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public GoToHomeWorker() {
+		super();
+	}
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		User user = null;
 		HttpSession session = request.getSession();
 		user = (User) session.getAttribute("user");
 		WorkerDAO workerDAO = new WorkerDAO(connection, user.getId());
-		List <Campaign> submittedCampaigns = null;
-		List <Campaign> availableCampaigns = null;
+		List<Campaign> submittedCampaigns = null;
+		List<Campaign> availableCampaigns = null;
+
 		try {
 			submittedCampaigns = workerDAO.findSubmittedCampaigns();
 			availableCampaigns = workerDAO.findAvailableCampaigns();
-		}catch(SQLException e){
+		} catch (SQLException e) {
 			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Loading Error!");
 		}
+
 		String path = "/WEB-INF/WorkerHomepage.html";
+
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		ctx.setVariable("submittedCampaigns", submittedCampaigns);
 		ctx.setVariable("availableCampaigns", availableCampaigns);
+
 		templateEngine.process(path, ctx, response.getWriter());
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		doGet(request, response);
 	}
 

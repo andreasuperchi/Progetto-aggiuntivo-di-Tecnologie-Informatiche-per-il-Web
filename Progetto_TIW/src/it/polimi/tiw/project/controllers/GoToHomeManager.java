@@ -28,20 +28,20 @@ import it.polimi.tiw.project.beans.Campaign;
 public class GoToHomeManager extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection = null;
-	private TemplateEngine templateEngine;	//uso il templating Thymeleaf
-       
-    public GoToHomeManager() {
-        super();
-    }
-    
-    public void init() throws ServletException {
+	private TemplateEngine templateEngine; // uso il templating Thymeleaf
+
+	public GoToHomeManager() {
+		super();
+	}
+
+	public void init() throws ServletException {
 		ServletContext servletContext = getServletContext();
 		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
 		templateResolver.setTemplateMode(TemplateMode.HTML);
 		this.templateEngine = new TemplateEngine();
 		this.templateEngine.setTemplateResolver(templateResolver);
 		templateResolver.setSuffix(".html");
-		
+
 		try {
 			ServletContext context = getServletContext();
 			String driver = context.getInitParameter("dbDriver");
@@ -58,53 +58,45 @@ public class GoToHomeManager extends HttpServlet {
 		}
 	}
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String loginPath = getServletContext().getContextPath() + "/index.html";	//mi salvo il path di login
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		User userBean = null;
 		List<Campaign> campaigns = null;
-		
-		HttpSession session = request.getSession();	//mi prendo la sessione
-		
-		if (session.isNew() || session.getAttribute("user") == null) {	//se la sessione è nuova o l'utente non si è ancora loggato
-			response.sendRedirect(loginPath);	//lo redirigo alla pagina di login
-			return;
-		} else {
-			userBean = (User) session.getAttribute("user");
-			
-			if (!userBean.getRole().equals("manager")) {	//se non sono un manager, vengo rediretto alla pagina di login
-				response.sendRedirect(loginPath);
-				return;
-			}
-			
-			ManagerDAO manDAO = new ManagerDAO(connection, userBean.getId());
-			
-			try {
-				campaigns = manDAO.findCampaigns();
-			} catch (SQLException e) {
-				response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Failure in accessing the campaigns in the database!");
-			}
+
+		HttpSession session = request.getSession(); // mi prendo la sessione
+
+		userBean = (User) session.getAttribute("user");
+
+		ManagerDAO manDAO = new ManagerDAO(connection, userBean.getId());
+
+		try {
+			campaigns = manDAO.findCampaigns();
+		} catch (SQLException e) {
+			response.sendError(HttpServletResponse.SC_BAD_GATEWAY,
+					"Failure in accessing the campaigns in the database!");
 		}
-		
+
 		String path = "/WEB-INF/ManagerHomePage.html";
 		ServletContext servletContext = getServletContext();
 		final WebContext context = new WebContext(request, response, servletContext, request.getLocale());
 		context.setVariable("campaigns", campaigns);
-		
+
 		templateEngine.process(path, context, response.getWriter());
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-	
+
 	public void destroy() {
 		try {
 			if (connection != null) {
 				connection.close();
 			}
 		} catch (SQLException e) {
-			
+
 		}
 	}
 

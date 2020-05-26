@@ -29,19 +29,19 @@ public class GoToImageDetailsPage extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection;
 	private TemplateEngine templateEngine;
-       
-    public GoToImageDetailsPage() {
-        super();
-    }
 
-    public void init() throws ServletException {
-    	ServletContext servletContext = getServletContext();
+	public GoToImageDetailsPage() {
+		super();
+	}
+
+	public void init() throws ServletException {
+		ServletContext servletContext = getServletContext();
 		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
 		templateResolver.setTemplateMode(TemplateMode.HTML);
 		this.templateEngine = new TemplateEngine();
 		this.templateEngine.setTemplateResolver(templateResolver);
 		templateResolver.setSuffix(".html");
-    	
+
 		try {
 			ServletContext context = getServletContext();
 			String driver = context.getInitParameter("dbDriver");
@@ -57,38 +57,39 @@ public class GoToImageDetailsPage extends HttpServlet {
 			throw new UnavailableException("Error! Couldn't get database connection.");
 		}
 	}
-    
-    
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		int imageID = Integer.parseInt(request.getParameter("id"));
 		int campaignID = Integer.parseInt(request.getParameter("idCampaign"));
 		Image image = null;
 		List<Annotation> annotations = null;
 		CampaignDAO cDAO = new CampaignDAO(connection, campaignID);
 		ImageDAO iDAO = new ImageDAO(connection, imageID);
-		
+
 		try {
 			image = cDAO.getImage(imageID);
 		} catch (SQLException e) {
 			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Loading Error!");
 		}
-		
+
 		try {
 			annotations = iDAO.findAnnotations();
 		} catch (SQLException e) {
 			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Loading Error!");
 		}
-	
+
 		String path = "/WEB-INF/ImageDetailsPage.html";
 		ServletContext servletContext = getServletContext();
 		final WebContext context = new WebContext(request, response, servletContext, request.getLocale());
 		context.setVariable("annotations", annotations);
 		context.setVariable("image", image);
-		
+
 		templateEngine.process(path, context, response.getWriter());
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		doGet(request, response);
 	}
 

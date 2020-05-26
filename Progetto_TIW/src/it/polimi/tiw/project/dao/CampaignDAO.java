@@ -13,7 +13,7 @@ import it.polimi.tiw.project.beans.Image;
 public class CampaignDAO {
 	int id;
 	private Connection connection;
-	
+
 	public CampaignDAO(Connection connection, int id) {
 		this.connection = connection;
 		this.id = id;
@@ -21,20 +21,20 @@ public class CampaignDAO {
 
 	public void changeToActive() throws SQLException {
 		String query = "UPDATE campaign SET state = 'started' WHERE id = ?";
-		
+
 		try (PreparedStatement pstatement = connection.prepareStatement(query)) {
 			pstatement.setInt(1, id);
-			
+
 			pstatement.executeUpdate();
 		}
 	}
 
 	public void changeToClosed() throws SQLException {
 		String query = "UPDATE campaign SET state = 'closed' WHERE id = ? ";
-		
+
 		try (PreparedStatement pstatement = connection.prepareStatement(query)) {
 			pstatement.setInt(1, id);
-			
+
 			pstatement.executeUpdate();
 		}
 	}
@@ -49,7 +49,7 @@ public class CampaignDAO {
 			try (ResultSet result = pstatement.executeQuery()) {
 				while (result.next()) {
 					Image image = new Image();
-					
+
 					image.setId(result.getInt("id"));
 					image.setPhoto(result.getString("photo"));
 					image.setLatitude(result.getFloat("latitude"));
@@ -60,7 +60,7 @@ public class CampaignDAO {
 					image.setDate(result.getDate("date"));
 					image.setResolution(result.getString("resolution"));
 					image.setIdCampaign(result.getInt("id_campaign"));
-					
+
 					campaignImages.add(image);
 				}
 			}
@@ -82,7 +82,7 @@ public class CampaignDAO {
 			pstatement.setString(7, date);
 			pstatement.setString(8, resolution);
 			pstatement.setInt(9, this.id);
-			
+
 			pstatement.executeUpdate();
 		}
 	}
@@ -102,17 +102,17 @@ public class CampaignDAO {
 				pstatement.setInt(1, images.get(i).getId());
 
 				try (ResultSet result = pstatement.executeQuery();) {
-					while(result.next()) {
+					while (result.next()) {
 						numberOfAnnotations += result.getInt("COUNT(*)");
 					}
 				}
-				
+
 				query = "SELECT COUNT(DISTINCT validity) FROM annotation WHERE id_image = ?";
 				try (PreparedStatement pstatement1 = connection.prepareStatement(query);) {
 					pstatement1.setInt(1, images.get(i).getId());
 
 					try (ResultSet result1 = pstatement1.executeQuery()) {
-						while(result1.next()) {
+						while (result1.next()) {
 							if (result1.getInt("COUNT(DISTINCT validity)") == 2) {
 								conflictual++;
 							}
@@ -129,17 +129,17 @@ public class CampaignDAO {
 		}
 		return stats;
 	}
-	
+
 	public Image getImage(int imageID) throws SQLException {
 		Image image = new Image();
 		String query = "SELECT * FROM image WHERE id = ? AND id_campaign = ?";
-		
+
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setInt(1, imageID);
 			pstatement.setInt(2, this.id);
-			
+
 			try (ResultSet result = pstatement.executeQuery()) {
-				while(result.next()) {
+				while (result.next()) {
 					image.setId(result.getInt("id"));
 					image.setPhoto(result.getString("photo"));
 					image.setLatitude(result.getFloat("latitude"));
@@ -152,10 +152,9 @@ public class CampaignDAO {
 					image.setIdCampaign(result.getInt("id_campaign"));
 				}
 			}
-			
-			
+
 		}
-		
+
 		return image;
 	}
 }

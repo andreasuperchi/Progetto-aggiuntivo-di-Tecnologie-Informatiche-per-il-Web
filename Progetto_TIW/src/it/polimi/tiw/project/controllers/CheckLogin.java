@@ -20,12 +20,12 @@ import it.polimi.tiw.project.dao.UserDAO;
 public class CheckLogin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection = null;
-       
-    public CheckLogin() {
-        super();
-    }
 
-    public void init() throws ServletException {
+	public CheckLogin() {
+		super();
+	}
+
+	public void init() throws ServletException {
 		try {
 			ServletContext context = getServletContext();
 			String driver = context.getInitParameter("dbDriver");
@@ -41,44 +41,58 @@ public class CheckLogin extends HttpServlet {
 			throw new UnavailableException("Error! Couldn't get database connection.");
 		}
 	}
-    
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
-	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String username = request.getParameter("username");	//mi salvo gli attributi che mi arrivano dalla request
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String username = request.getParameter("username"); // mi salvo gli attributi che mi arrivano dalla request
 		String password = request.getParameter("password");
 		UserDAO userDAO = new UserDAO(connection);
 		User userBean = null;
-		
+
 		try {
 			userBean = userDAO.checkCredentials(username, password);
-		} catch(SQLException e) {
+		} catch (SQLException e) {
 			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Credential checking error!");
 		}
-		
-		String path = getServletContext().getContextPath();	//mi salvo il path di "default"
-		
+
+		String path = getServletContext().getContextPath(); // mi salvo il path di "default"
+
 		if (userBean == null) {
-			path = getServletContext().getContextPath() + "/index.html";	//se la creazione del bean fallisce, reindirizzo alla homepage
+			path = getServletContext().getContextPath() + "/index.html"; // se la creazione del bean fallisce,
+																			// reindirizzo alla homepage
 		} else {
-			request.getSession().setAttribute("user", userBean);	//salvo nella sessione, nel campo user, il bean appena creato
-			String target = (userBean.getRole().equals("manager")) ? "/GoToHomeManager" : "/GoToHomeWorker";	//mi salvo il path corrispondente a seconda del tipo di utente che ho
-			path = path + target;	//costruisco il path completo
+			request.getSession().setAttribute("user", userBean); // salvo nella sessione, nel campo user, il bean appena
+																	// creato
+			String target = (userBean.getRole().equals("manager")) ? "/GoToHomeManager" : "/GoToHomeWorker"; // mi salvo
+																												// il
+																												// path
+																												// corrispondente
+																												// a
+																												// seconda
+																												// del
+																												// tipo
+																												// di
+																												// utente
+																												// che
+																												// ho
+			path = path + target; // costruisco il path completo
 		}
-		
-		response.sendRedirect(path);	//redirigo l'utente alla corretta homepage
+
+		response.sendRedirect(path); // redirigo l'utente alla corretta homepage
 	}
-	
-	public void destroy() {	//mi permette di chiudere la connessione, se è ancora attiva
+
+	public void destroy() { // mi permette di chiudere la connessione, se è ancora attiva
 		try {
 			if (connection != null) {
 				connection.close();
 			}
 		} catch (SQLException e) {
-			
+
 		}
 	}
 

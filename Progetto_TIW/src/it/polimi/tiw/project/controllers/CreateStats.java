@@ -21,13 +21,12 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 import it.polimi.tiw.project.beans.CampaignStats;
 import it.polimi.tiw.project.dao.CampaignDAO;
 
-
 @WebServlet("/CreateStats")
 public class CreateStats extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    private Connection connection;
-    private TemplateEngine templateEngine;
-	
+	private Connection connection;
+	private TemplateEngine templateEngine;
+
 	public void init() throws ServletException {
 		ServletContext servletContext = getServletContext();
 		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
@@ -35,6 +34,7 @@ public class CreateStats extends HttpServlet {
 		this.templateEngine = new TemplateEngine();
 		this.templateEngine.setTemplateResolver(templateResolver);
 		templateResolver.setSuffix(".html");
+
 		try {
 			ServletContext context = getServletContext();
 			String driver = context.getInitParameter("dbDriver");
@@ -49,33 +49,34 @@ public class CreateStats extends HttpServlet {
 			throw new UnavailableException("Couldn't get db connection");
 		}
 	}
-	
-    public CreateStats() {
-        super();
-    }
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		CampaignStats campaignStats =  null;
+	public CreateStats() {
+		super();
+	}
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		CampaignStats campaignStats = null;
 		int campaignID = Integer.parseInt(request.getParameter("id"));
 		CampaignDAO campaignDAO = new CampaignDAO(connection, campaignID);
-		
+
 		try {
 			campaignStats = campaignDAO.createStats();
+		} catch (SQLException e) {
+			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Loading Error!");
 		}
-		catch(SQLException e) {
-			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Loading Error!");			
-		}
-		
+
 		String path = "/WEB-INF/CampaignStatsPage.html";
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		ctx.setVariable("campaignID", campaignID);
 		ctx.setVariable("campaignStats", campaignStats);
-		
+
 		templateEngine.process(path, ctx, response.getWriter());
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		doGet(request, response);
 	}
 

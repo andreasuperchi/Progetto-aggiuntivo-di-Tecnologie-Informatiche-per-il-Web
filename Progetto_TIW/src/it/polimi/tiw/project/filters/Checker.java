@@ -15,28 +15,29 @@ import javax.servlet.http.HttpSession;
 @WebFilter("/Checker")
 public class Checker implements Filter {
 
-    public Checker() {
-    }
+	public Checker() {
+	}
 
 	public void destroy() {
 		// TODO Auto-generated method stub
 	}
 
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+			throws IOException, ServletException {
 		System.out.println("Login checker filter executing...");
-		
+
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
-		
+
 		String loginPath = httpRequest.getServletContext().getContextPath() + "/index.html";
-		
+
 		HttpSession session = httpRequest.getSession();
-		
+
 		if (session.isNew() || session.getAttribute("user") == null) {
 			httpResponse.sendRedirect(loginPath);
 			return;
 		}
-		
+
 		chain.doFilter(request, response);
 	}
 

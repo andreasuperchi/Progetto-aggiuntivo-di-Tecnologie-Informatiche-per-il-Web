@@ -48,10 +48,10 @@
   	</filter-mapping>
   	<filter-mapping>
   		<filter-name>ManagerChecker</filter-name>
-  		<url-pattern>/GoToHomeManager</url-pattern>
   		<url-pattern>/CloseCampaign</url-pattern>
   		<url-pattern>/CreateCampaign</url-pattern>
   		<url-pattern>/CreateStats</url-pattern>
+  		<url-pattern>/GoToHomeManager</url-pattern>
   		<url-pattern>/StartCampaign</url-pattern>
   		<url-pattern>/UploadImage</url-pattern>
   	</filter-mapping>

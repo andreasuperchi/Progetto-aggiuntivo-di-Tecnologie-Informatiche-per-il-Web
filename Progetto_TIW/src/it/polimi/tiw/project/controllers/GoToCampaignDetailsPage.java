@@ -29,19 +29,19 @@ public class GoToCampaignDetailsPage extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection = null;
 	private TemplateEngine templateEngine;
-       
-    public GoToCampaignDetailsPage() {
-        super();
-    }
-    
-    public void init() throws ServletException {
+
+	public GoToCampaignDetailsPage() {
+		super();
+	}
+
+	public void init() throws ServletException {
 		ServletContext servletContext = getServletContext();
 		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
 		templateResolver.setTemplateMode(TemplateMode.HTML);
 		this.templateEngine = new TemplateEngine();
 		this.templateEngine.setTemplateResolver(templateResolver);
 		templateResolver.setSuffix(".html");
-		
+
 		try {
 			ServletContext context = getServletContext();
 			String driver = context.getInitParameter("dbDriver");
@@ -58,36 +58,39 @@ public class GoToCampaignDetailsPage extends HttpServlet {
 		}
 	}
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		int campaignId = Integer.parseInt(request.getParameter("id"));
 		List<Image> images = null;
 		Campaign campaignBean = null;
-		
+
 		UserDAO uDAO = new UserDAO(connection);
 		CampaignDAO cDAO = new CampaignDAO(connection, campaignId);
-		
+
 		try {
 			images = cDAO.campaignImages();
 		} catch (SQLException e) {
 			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Failure in accessing the images in the database!");
 		}
-		
+
 		try {
 			campaignBean = uDAO.getCampaign(campaignId);
 		} catch (SQLException e) {
-			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Failure in accessing the campaign in the database!");
+			response.sendError(HttpServletResponse.SC_BAD_GATEWAY,
+					"Failure in accessing the campaign in the database!");
 		}
-		
+
 		String path = "/WEB-INF/CampaignDetailsPage.html";
 		ServletContext servletContext = getServletContext();
 		final WebContext context = new WebContext(request, response, servletContext, request.getLocale());
 		context.setVariable("campaign", campaignBean);
 		context.setVariable("images", images);
-		
+
 		templateEngine.process(path, context, response.getWriter());
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		doGet(request, response);
 	}
 }

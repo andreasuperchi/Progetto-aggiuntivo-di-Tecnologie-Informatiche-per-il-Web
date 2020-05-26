@@ -27,21 +27,21 @@
 				</tr>	
 		</tbody>
 	</table> <br>
-	<div>
-		<form th:action="@{/UploadImage(id=${campaign.id})}" method="POST">
-		Photo: <input type="file" name="photo" required> <br>
-		Latitude: <input type="text" name="latitude" required> <br>
-		Longitude: <input type="text" name="longitude" required> <br>
-		County: <input type="text" name="county" required> <br>
-		Municipality: <input type="text" name="municipality" required> <br>
-		Source: <input type="text" name="source" required> <br>
-		Resolution: <select name="resolution" required>
-			<option value="high">High</option>
-			<option value="medium">Medium</option>
-			<option value="low">Low</option>
-			</select> <br>
-			<input type="submit" value="Upload Image">
-		</form>
+	<div th:switch="${session.user.role}">
+		<form th:case="'manager'" th:action="@{/UploadImage(id=${campaign.id})}" method="POST">
+			Photo: <input type="file" name="photo" required> <br>
+			Latitude: <input type="text" name="latitude" required> <br>
+			Longitude: <input type="text" name="longitude" required> <br>
+			County: <input type="text" name="county" required> <br>
+			Municipality: <input type="text" name="municipality" required> <br>
+			Source: <input type="text" name="source" required> <br>
+			Resolution: <select name="resolution" required>
+				<option value="high">High</option>
+				<option value="medium">Medium</option>
+				<option value="low">Low</option>
+				</select> <br>
+				<input type="submit" value="Upload Image">
+			</form>
 	</div>
 	<div align="right">
 		<a th:href="@{/CreateStats(id=${campaign.id})}">Statistics</a>

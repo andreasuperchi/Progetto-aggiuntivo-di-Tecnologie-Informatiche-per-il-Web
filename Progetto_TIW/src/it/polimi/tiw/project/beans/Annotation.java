@@ -1,7 +1,5 @@
 package it.polimi.tiw.project.beans;
 
-
-
 public class Annotation {
 	private int id;
 	private String creationDate;
@@ -66,5 +64,5 @@ public class Annotation {
 	public void setIdWorker(int idWorker) {
 		this.idWorker = idWorker;
 	}
-	
+
 }

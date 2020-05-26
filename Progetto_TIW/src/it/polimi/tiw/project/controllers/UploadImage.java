@@ -22,12 +22,12 @@ import it.polimi.tiw.project.dao.CampaignDAO;
 public class UploadImage extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection;
-	
-    public UploadImage() {
-        super();
-    }
-    
-    public void init() throws ServletException {		
+
+	public UploadImage() {
+		super();
+	}
+
+	public void init() throws ServletException {
 		try {
 			ServletContext context = getServletContext();
 			String driver = context.getInitParameter("dbDriver");
@@ -44,21 +44,23 @@ public class UploadImage extends HttpServlet {
 		}
 	}
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		int campaignId = Integer.parseInt(request.getParameter("id"));
-		
+
 		CampaignDAO cDAO = new CampaignDAO(connection, campaignId);
-		
+
 		Date date = new Date();
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		
+
 		File photo = new File(request.getParameter("photo"));
 		String photoPath = photo.getAbsolutePath();
-		
+
 		String latitude = request.getParameter("latitude");
 		String longitude = request.getParameter("longitude");
 		String county = request.getParameter("county");
@@ -66,13 +68,13 @@ public class UploadImage extends HttpServlet {
 		String source = request.getParameter("source");
 		String finalDate = formatter.format(date);
 		String resolution = request.getParameter("resolution");
-		
+
 		try {
 			cDAO.addImage(photoPath, latitude, longitude, county, municipality, source, finalDate, resolution);
-		} catch(SQLException e) {
+		} catch (SQLException e) {
 			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, e.getMessage());
 		}
-		
+
 		String path = "/Progetto_TIW/GoToCampaignDetailsPage?id=" + campaignId;
 		response.sendRedirect(path);
 	}

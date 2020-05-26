@@ -15,8 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-
-
 import it.polimi.tiw.project.beans.User;
 import it.polimi.tiw.project.dao.ManagerDAO;
 import it.polimi.tiw.project.dao.WorkerDAO;
@@ -25,12 +23,12 @@ import it.polimi.tiw.project.dao.WorkerDAO;
 public class ChangePersonalInfo extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection;
-       
-    public ChangePersonalInfo() {
-        super();
-    }
-    
-    public void init() throws ServletException {		
+
+	public ChangePersonalInfo() {
+		super();
+	}
+
+	public void init() throws ServletException {
 		try {
 			ServletContext context = getServletContext();
 			String driver = context.getInitParameter("dbDriver");
@@ -46,47 +44,45 @@ public class ChangePersonalInfo extends HttpServlet {
 			throw new UnavailableException("Error! Couldn't get database connection.");
 		}
 	}
-    
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		User user = null;
 		String path = getServletContext().getContextPath();
 
-		if (session.isNew() || session.getAttribute("user") == null) {	//se la sessione è nuova o l'utente non si è ancora loggato
-			path = getServletContext().getContextPath() + "/index.html";
-			return;
-		} else {
-			user = (User) session.getAttribute("user");
-			String username = request.getParameter("username");
-			String password = request.getParameter("password");
-			String email = request.getParameter("email");
-			
-			if (user.getRole().equals("manager")) {
-				ManagerDAO manDAO = new ManagerDAO(connection, user.getId());
-				
-				try {
-					manDAO.changeInfo(username, password, email);
-				} catch (SQLException e) {
-					response.sendError(HttpServletResponse.SC_BAD_GATEWAY, e.getMessage());
-				}
-			} else {
-				WorkerDAO worDAO = new WorkerDAO(connection, user.getId());
-				String experience = request.getParameter("experience");
-				File photo = new File(request.getParameter("photo"));
-				String finalPhoto = photo.getAbsolutePath();
-				
-				try {
-					worDAO.changeInfo(username, password, email, experience, finalPhoto);
-				} catch(SQLException e) {
-					response.sendError(HttpServletResponse.SC_BAD_GATEWAY, e.getMessage());
-				}
+		user = (User) session.getAttribute("user");
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		String email = request.getParameter("email");
+
+		if (user.getRole().equals("manager")) {
+			ManagerDAO manDAO = new ManagerDAO(connection, user.getId());
+
+			try {
+				manDAO.changeInfo(username, password, email);
+			} catch (SQLException e) {
+				response.sendError(HttpServletResponse.SC_BAD_GATEWAY, e.getMessage());
 			}
+		} else {
+			WorkerDAO worDAO = new WorkerDAO(connection, user.getId());
+			String experience = request.getParameter("experience");
+			File photo = new File(request.getParameter("photo"));
+			String finalPhoto = photo.getAbsolutePath();
+
+			try {
+				worDAO.changeInfo(username, password, email, experience, finalPhoto);
+			} catch (SQLException e) {
+				response.sendError(HttpServletResponse.SC_BAD_GATEWAY, e.getMessage());
+			}
+
 		}
-		
+
 		response.sendRedirect(path);
 	}
 

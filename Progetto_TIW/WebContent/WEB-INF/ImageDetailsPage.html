@@ -23,30 +23,32 @@
 			Date: <span th:text="${image.date}"></span><br>
 			Resolution: <span th:text="${image.resolution}"></span><br>
 		</h2>
-		<div align="right">
-			<form th:action="@{/AddAnnotation(imageID=${image.id}, cID=${image.idCampaign})}" method="post">
-				Validity: <select name="validity" required>
-					<option value="true">True</option>
-					<option value="false">False</option>
-				</select> <br>
-				Trust: <select name="trust" required>
-					<option value="high">High</option>
-					<option value="medium">Medium</option>
-					<option value="low">Low</option>
-				</select> <br>
-				Note: <input type="text" name="note"> <br>
-					<input type="submit" value="Add Annotation">
-			</form>
-		</div>
+	</div>
+	<div align="right" th:switch="${session.user.role}">
+		<form th:case="'worker'" th:action="@{/AddAnnotation(imageID=${image.id}, cID=${image.idCampaign})}" method="post">
+			Validity: <select name="validity" required>
+				<option value="true">True</option>
+				<option value="false">False</option>
+			</select> <br>
+			Trust: <select name="trust" required>
+				<option value="high">High</option>
+				<option value="medium">Medium</option>
+				<option value="low">Low</option>
+			</select> <br>
+			Note: <input type="text" name="note"> <br>
+				<input type="submit" value="Add Annotation">
+		</form>
 	</div>
 	
 	<table>
 		<thead>
-			<th>Creation Date</th>
-			<th>Validity</th>
-			<th>Trust</th>
-			<th>Note</th>
-			<th>ID Worker</th>
+			<tr>
+				<th>Creation Date</th>
+				<th>Validity</th>
+				<th>Trust</th>
+				<th>Note</th>
+				<th>ID Worker</th>
+			</tr>
 		</thead>
 		<tbody>
 				<tr th:each="a : ${annotations}">

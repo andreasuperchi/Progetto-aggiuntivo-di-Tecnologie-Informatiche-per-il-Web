@@ -20,11 +20,11 @@ public class CloseCampaign extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection;
 
-    public CloseCampaign() {
-        super();
-    }
-    
-    public void init() throws ServletException {
+	public CloseCampaign() {
+		super();
+	}
+
+	public void init() throws ServletException {
 		try {
 			ServletContext context = getServletContext();
 			String driver = context.getInitParameter("dbDriver");
@@ -41,21 +41,23 @@ public class CloseCampaign extends HttpServlet {
 		}
 	}
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		int cID = Integer.parseInt(request.getParameter("id"));
 		CampaignDAO cDAO = new CampaignDAO(connection, cID);
-		
+
 		try {
 			cDAO.changeToClosed();
 		} catch (SQLException e) {
 			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Failure changing the state of the campaign!");
 		}
-		
+
 		String path = "/Progetto_TIW/GoToCampaignDetailsPage?id=" + cID;
 		response.sendRedirect(path);
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		doGet(request, response);
 	}
 

@@ -20,12 +20,12 @@ import it.polimi.tiw.project.dao.UserDAO;
 public class RegisterUser extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection;
-    
-    public RegisterUser() {
-        super();
-    }
-    
-    public void init() throws ServletException {
+
+	public RegisterUser() {
+		super();
+	}
+
+	public void init() throws ServletException {
 		try {
 			ServletContext context = getServletContext();
 			String driver = context.getInitParameter("dbDriver");
@@ -42,32 +42,34 @@ public class RegisterUser extends HttpServlet {
 		}
 	}
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		String email = request.getParameter("email");
 		String experience = request.getParameter("experience");
-		
+
 		File photo = new File(request.getParameter("photo"));
 		String photoPath = photo.getAbsolutePath();
-		
+
 		String role = request.getParameter("role");
-		
+
 		UserDAO userDAO = new UserDAO(connection);
-		
+
 		try {
 			userDAO.addUser(username, password, email, experience, photoPath, role);
-		} catch(SQLException e) {
+		} catch (SQLException e) {
 			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Registration failure!");
 		}
-		
+
 		String loginPath = getServletContext().getContextPath() + "/index.html";
-		
-		response.sendRedirect(loginPath);	//reindirizzo l'utente appena registrato alla pagina di login
+
+		response.sendRedirect(loginPath); // reindirizzo l'utente appena registrato alla pagina di login
 	}
 
 }

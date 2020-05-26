@@ -14,25 +14,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-
 import it.polimi.tiw.project.beans.User;
 import it.polimi.tiw.project.dao.WorkerDAO;
-
 
 @WebServlet("/SubmitCampaign")
 public class SubmitCampaign extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public SubmitCampaign() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-    
-    public void init() throws ServletException {
+
+	public SubmitCampaign() {
+		super();
+	}
+
+	public void init() throws ServletException {
 		try {
 			ServletContext context = getServletContext();
 			String driver = context.getInitParameter("dbDriver");
@@ -49,31 +43,26 @@ public class SubmitCampaign extends HttpServlet {
 		}
 	}
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		User  user = null;
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		User user = null;
 		HttpSession session = request.getSession();
 		user = (User) session.getAttribute("user");
 		int id = Integer.parseInt(request.getParameter("id"));
 		WorkerDAO workerDAO = new WorkerDAO(connection, user.getId());
-		
+
 		try {
 			workerDAO.submitCampaign(id);
-		}
-		catch(SQLException e){
+		} catch (SQLException e) {
 			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Loading Error!");
 		}
-		String path = "/Progetto_TIW/GoToCampaignDetailsPage?id="+ id;
+
+		String path = "/Progetto_TIW/GoToCampaignDetailsPage?id=" + id;
 		response.sendRedirect(path);
 	}
 

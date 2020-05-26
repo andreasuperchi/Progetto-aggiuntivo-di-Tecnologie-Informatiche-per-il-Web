@@ -34,10 +34,11 @@ public class ImageDAO {
 //			pstatement.executeUpdate();
 //		}
 //	}
-	
-	public void addAnnotation(String creationDate, String validity, String trust, String note, int id_image, int id_worker) throws SQLException {
+
+	public void addAnnotation(String creationDate, String validity, String trust, String note, int id_image,
+			int id_worker) throws SQLException {
 		String query = "INSERT INTO annotation (creation_date, validity, trust, note, id_image, id_worker) VALUES (?, ?, ?, ?, ?, ?)";
-		
+
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setString(1, creationDate);
 			pstatement.setString(2, validity);
@@ -45,7 +46,7 @@ public class ImageDAO {
 			pstatement.setString(4, note);
 			pstatement.setInt(5, id_image);
 			pstatement.setInt(6, id_worker);
-			
+
 			pstatement.executeUpdate();
 		}
 	}

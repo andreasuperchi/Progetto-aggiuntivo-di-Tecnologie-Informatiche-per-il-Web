@@ -57,8 +57,6 @@ public class ManagerDAO {
 			pstatement.executeUpdate(); // eseguo l'inserimento della campagna nel db
 		}
 	}
-	
-	
 
 //	public void changeUsername(String username) throws SQLException {
 //		String query = "UPDATE user SET username = ? WHERE id = ?";
@@ -86,17 +84,17 @@ public class ManagerDAO {
 //			pstatement.executeUpdate();
 //		}
 //	}
-	
+
 	public void changeInfo(String username, String password, String email) throws SQLException {
 		String query = "UPDATE user SET username = ?, password = ?, email = ? WHERE id = ?";
-		
+
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setString(1, username);
 			pstatement.setString(2, password);
 			pstatement.setString(3, email);
 			pstatement.setInt(4, this.id);
-			
+
 			pstatement.executeUpdate();
-		} 
+		}
 	}
 }

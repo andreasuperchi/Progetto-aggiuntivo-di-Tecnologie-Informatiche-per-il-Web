@@ -21,12 +21,12 @@ import it.polimi.tiw.project.dao.ManagerDAO;
 public class CreateCampaign extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection = null;
-       
-    public CreateCampaign() {
-        super();
-    }
-    
-    public void init() throws ServletException {
+
+	public CreateCampaign() {
+		super();
+	}
+
+	public void init() throws ServletException {
 		try {
 			ServletContext context = getServletContext();
 			String driver = context.getInitParameter("dbDriver");
@@ -43,42 +43,41 @@ public class CreateCampaign extends HttpServlet {
 		}
 	}
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		User userBean = null;
-		HttpSession session = request.getSession();	//salvo la sessione
-		
+		HttpSession session = request.getSession(); // salvo la sessione
+
 		userBean = (User) session.getAttribute("user");
 		String campaignName = request.getParameter("name");
 		String customer = request.getParameter("customer");
-		
-		if (campaignName == null || customer == null) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing required informations!");
-		}
-		
+
 		int userID = userBean.getId();
 		ManagerDAO manDAO = new ManagerDAO(connection, userID);
-		
+
 		try {
 			manDAO.createCampaign(campaignName, customer);
 		} catch (SQLException e) {
-			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "There was an error in the creation of the campaign!");
+			response.sendError(HttpServletResponse.SC_BAD_GATEWAY,
+					"There was an error in the creation of the campaign!");
 		}
-		
+
 		String path = "/Progetto_TIW/GoToHomeManager";
 		response.sendRedirect(path);
 	}
-	
+
 	public void destroy() {
 		try {
 			if (connection != null) {
 				connection.close();
 			}
 		} catch (SQLException e) {
-			
+
 		}
 	}
 }

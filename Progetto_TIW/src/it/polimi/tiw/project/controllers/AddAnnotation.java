@@ -23,12 +23,12 @@ import it.polimi.tiw.project.dao.ImageDAO;
 public class AddAnnotation extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	Connection connection;
-       
-    public AddAnnotation() {
-        super();
-    }
-    
-    public void init() throws ServletException {
+
+	public AddAnnotation() {
+		super();
+	}
+
+	public void init() throws ServletException {
 		try {
 			ServletContext context = getServletContext();
 			String driver = context.getInitParameter("dbDriver");
@@ -45,33 +45,34 @@ public class AddAnnotation extends HttpServlet {
 		}
 	}
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		Date date = new Date();
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
-		
+
 		String finalDate = formatter.format(date);
 		String validity = request.getParameter("validity");
 		String trust = request.getParameter("trust");
 		String note = request.getParameter("note");
-		
+
 		int imageID = Integer.parseInt(request.getParameter("imageID"));
 		int cID = Integer.parseInt(request.getParameter("cID"));
-		
+
 		ImageDAO imageDAO = new ImageDAO(connection, imageID);
-			
+
 		try {
 			imageDAO.addAnnotation(finalDate, validity, trust, note, imageID, user.getId());
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Loading Error!");
 		}
-		
+
 		String path = "/Progetto_TIW/GoToImageDetailsPage?id=" + imageID + "&idCampaign=" + cID;
 		response.sendRedirect(path);
 	}

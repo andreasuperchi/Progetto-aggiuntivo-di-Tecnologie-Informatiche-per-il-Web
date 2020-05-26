@@ -17,33 +17,33 @@ import it.polimi.tiw.project.beans.User;
 @WebFilter("/ManagerChecker")
 public class ManagerChecker implements Filter {
 
-    public ManagerChecker() {
-    }
+	public ManagerChecker() {
+	}
 
 	public void destroy() {
 	}
 
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+			throws IOException, ServletException {
 		System.out.println("Manager checker filter executing...");
-		
+
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
-		
+
 		String loginPath = httpRequest.getServletContext().getContextPath() + "/index.html";
-		
+
 		HttpSession session = httpRequest.getSession();
-		
+
 		User user = null;
 		user = (User) session.getAttribute("user");
-		
+
 		if (!user.getRole().equals("manager")) {
 			httpResponse.sendRedirect(loginPath);
 			return;
 		}
-		
+
 		chain.doFilter(request, response);
 	}
-
 
 	public void init(FilterConfig fConfig) throws ServletException {
 	}
