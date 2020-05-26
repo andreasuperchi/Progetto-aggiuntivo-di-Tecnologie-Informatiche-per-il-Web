@@ -25,8 +25,8 @@ import it.polimi.tiw.project.dao.CampaignDAO;
 @WebServlet("/CreateStats")
 public class CreateStats extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    Connection connection;
-    TemplateEngine templateEngine;
+    private Connection connection;
+    private TemplateEngine templateEngine;
 	
 	public void init() throws ServletException {
 		ServletContext servletContext = getServletContext();
@@ -49,14 +49,11 @@ public class CreateStats extends HttpServlet {
 			throw new UnavailableException("Couldn't get db connection");
 		}
 	}
+	
     public CreateStats() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		CampaignStats campaignStats =  null;
 		int campaignID = Integer.parseInt(request.getParameter("id"));
@@ -68,19 +65,17 @@ public class CreateStats extends HttpServlet {
 		catch(SQLException e) {
 			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Loading Error!");			
 		}
+		
 		String path = "/WEB-INF/CampaignStatsPage.html";
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		ctx.setVariable("campaignID", campaignID);
 		ctx.setVariable("campaignStats", campaignStats);
+		
 		templateEngine.process(path, ctx, response.getWriter());
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 

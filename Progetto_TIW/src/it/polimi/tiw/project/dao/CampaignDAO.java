@@ -101,24 +101,30 @@ public class CampaignDAO {
 			for (int i = 0; i < images.size(); i++) {
 				pstatement.setInt(1, images.get(i).getId());
 
-				try (ResultSet result = pstatement.executeQuery()) {
-					numberOfAnnotations += result.getInt("COUNT(*)");
+				try (ResultSet result = pstatement.executeQuery();) {
+					while(result.next()) {
+						numberOfAnnotations += result.getInt("COUNT(*)");
+					}
 				}
-
-				query = "SELECT DISTINCT COUNT(validity) FROM annotation WHERE id_image = ?";
-				try (PreparedStatement pstatement1 = connection.prepareStatement(query)) {
+				
+				query = "SELECT COUNT(DISTINCT validity) FROM annotation WHERE id_image = ?";
+				try (PreparedStatement pstatement1 = connection.prepareStatement(query);) {
 					pstatement1.setInt(1, images.get(i).getId());
 
 					try (ResultSet result1 = pstatement1.executeQuery()) {
-						conflictual += result1.getInt("COUNT(validity)") - 1;
+						while(result1.next()) {
+							if (result1.getInt("COUNT(DISTINCT validity)") == 2) {
+								conflictual++;
+							}
+						}
 					}
 
 				}
 			}
 
 			stats.setNumberOfAnnotations(numberOfAnnotations);
-			stats.setAverageAnnotationsPerImages(numberOfAnnotations / images.size());
-			stats.setConflictalAnnotation(conflictual);
+			stats.setAverageAnnotationsPerImage(numberOfAnnotations / images.size());
+			stats.setConflictualAnnotations(conflictual);
 
 		}
 		return stats;

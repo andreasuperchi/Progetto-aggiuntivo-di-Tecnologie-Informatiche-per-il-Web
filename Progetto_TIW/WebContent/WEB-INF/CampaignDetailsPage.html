@@ -9,7 +9,7 @@
 		<a th:href="@{/Logout}">Logout</a>
 	</div>
 	<div align="right">
-		<a th:href="@{/ChangePersonalInfo}">Change personal Info</a>
+		<a href="/Progetto_TIW/ChangeInfo.html">Change personal Info</a>
 	</div>
 	<h1>These are the details of the campaign with ID: <span th:text="${campaign.id}"></span>.</h1> <br>
 	<div align="center">
@@ -42,6 +42,9 @@
 			</select> <br>
 			<input type="submit" value="Upload Image">
 		</form>
+	</div>
+	<div align="right">
+		<a th:href="@{/CreateStats(id=${campaign.id})}">Statistics</a>
 	</div>
 </body>
 </html>

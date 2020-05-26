@@ -4,14 +4,14 @@ public class CampaignStats {
 	private int numberOfImages;
 	private int numberOfAnnotations;
 	private float averageAnnotationsPerImage;
-	private int conflictualAnnotation;
+	private int conflictualAnnotations;
 
-	public int getConflictalAnnotation() {
-		return conflictualAnnotation;
+	public int getConflictualAnnotations() {
+		return conflictualAnnotations;
 	}
 
-	public void setConflictalAnnotation(int conflictalAnnotation) {
-		this.conflictualAnnotation = conflictalAnnotation;
+	public void setConflictualAnnotations(int conflictalAnnotations) {
+		this.conflictualAnnotations = conflictalAnnotations;
 	}
 
 	public int getNumberOfImages() {
@@ -30,11 +30,11 @@ public class CampaignStats {
 		this.numberOfAnnotations = numberOfAnnotations;
 	}
 
-	public float getAverageAnnotationsPerImages() {
+	public float getAverageAnnotationsPerImage() {
 		return averageAnnotationsPerImage;
 	}
 
-	public void setAverageAnnotationsPerImages(float averageAnnotationsPerImages) {
-		this.averageAnnotationsPerImage = averageAnnotationsPerImages;
+	public void setAverageAnnotationsPerImage(float averageAnnotationsPerImage) {
+		this.averageAnnotationsPerImage = averageAnnotationsPerImage;
 	}
 }
