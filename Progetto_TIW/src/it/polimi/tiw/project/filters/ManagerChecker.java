@@ -1,4 +1,4 @@
-package it.polimi.tiw.filters;
+package it.polimi.tiw.project.filters;
 
 import java.io.IOException;
 import javax.servlet.Filter;
@@ -12,18 +12,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebFilter("/Checker")
-public class Checker implements Filter {
+import it.polimi.tiw.project.beans.User;
 
-    public Checker() {
+@WebFilter("/ManagerChecker")
+public class ManagerChecker implements Filter {
+
+    public ManagerChecker() {
     }
 
 	public void destroy() {
-		// TODO Auto-generated method stub
 	}
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		System.out.println("Login checker filter executing...");
+		System.out.println("Manager checker filter executing...");
 		
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
@@ -32,13 +33,17 @@ public class Checker implements Filter {
 		
 		HttpSession session = httpRequest.getSession();
 		
-		if (session.isNew() || session.getAttribute("user") == null) {
+		User user = null;
+		user = (User) session.getAttribute("user");
+		
+		if (!user.getRole().equals("manager")) {
 			httpResponse.sendRedirect(loginPath);
 			return;
 		}
 		
 		chain.doFilter(request, response);
 	}
+
 
 	public void init(FilterConfig fConfig) throws ServletException {
 	}
