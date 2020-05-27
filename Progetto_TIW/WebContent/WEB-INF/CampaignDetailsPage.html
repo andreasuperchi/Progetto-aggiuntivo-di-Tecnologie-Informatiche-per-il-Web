@@ -34,8 +34,8 @@
 	<div th:switch="${session.user.role}" th:if = "${campaign.state == 'created'}">
 		<form th:case="'manager'" th:action="@{/UploadImage(id=${campaign.id})}" method="POST">
 			Photo: <input type="file" name="photo" required> <br>
-			Latitude: <input type="text" name="latitude" required> <br>
-			Longitude: <input type="text" name="longitude" required> <br>
+			Latitude: <input type="number" name="latitude" required> <br>
+			Longitude: <input type="number" name="longitude" required> <br>
 			County: <input type="text" name="county" required> <br>
 			Municipality: <input type="text" name="municipality" required> <br>
 			Source: <input type="text" name="source" required> <br>
