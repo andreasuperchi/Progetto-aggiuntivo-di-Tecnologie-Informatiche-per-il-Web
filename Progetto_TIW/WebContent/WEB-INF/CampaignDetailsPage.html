@@ -15,11 +15,11 @@
 	<div align="center">
 		<h2>Name: "<span th:text="${campaign.name}"></span>"</h2>
 		<div align="right" th:switch="${session.user.role}">
-			<a th:case="'manager'" th:href="@{/StartCampaign(id=${campaign.id})}" >Start Campaign</a>
+			<div th:if="${campaign.state == 'created'}"><a th:if = "${not images.isEmpty()}" th:case="'manager'" th:href="@{/StartCampaign(id=${campaign.id})}" >Start Campaign</a></div>
 		</div>
 		<h2>State: "<span th:text="${campaign.state}"></span>"</h2> 
 		<div align="right" th:switch="${session.user.role}">
-			<a th:case="'manager'" th:href="@{/CloseCampaign(id=${campaign.id})}">Close Campaign</a>
+			<a th:case="'manager'" th:if="${campaign.state == 'started'}" th:href="@{/CloseCampaign(id=${campaign.id})}">Close Campaign</a>
 		</div>
 		<h2>Customer: "<span th:text="${campaign.customer}"></span>"</h2>
 	</div>
@@ -31,7 +31,7 @@
 				</tr>	
 		</tbody>
 	</table> <br>
-	<div th:switch="${session.user.role}">
+	<div th:switch="${session.user.role}" th:if = "${campaign.state == 'created'}">
 		<form th:case="'manager'" th:action="@{/UploadImage(id=${campaign.id})}" method="POST">
 			Photo: <input type="file" name="photo" required> <br>
 			Latitude: <input type="text" name="latitude" required> <br>
@@ -48,7 +48,7 @@
 			</form>
 	</div>
 	<div align="right" th:switch="${session.user.role}">
-		<a th:case="'manager'" th:href="@{/CreateStats(id=${campaign.id})}">Statistics</a>
+		<a th:case="'manager'" th:if="${campaign.state != 'created'}" th:href="@{/CreateStats(id=${campaign.id})}">Statistics</a>
 	</div>
 </body>
 </html>
