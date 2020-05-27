@@ -32,7 +32,7 @@
 		</tbody>
 	</table> <br>
 	<div th:switch="${session.user.role}">
-		<form th:case="'manager'" th:action="@{/UploadImage(id=${campaign.id})}" method="POST">
+		<form th:case="'manager'" th:class="${campaign.state}? 'created'" th:action="@{/UploadImage(id=${campaign.id})}" method="POST">
 			Photo: <input type="file" name="photo" required> <br>
 			Latitude: <input type="text" name="latitude" required> <br>
 			Longitude: <input type="text" name="longitude" required> <br>
@@ -45,7 +45,7 @@
 				<option value="low">Low</option>
 				</select> <br>
 				<input type="submit" value="Upload Image">
-			</form>
+		</form>
 	</div>
 	<div align="right" th:switch="${session.user.role}">
 		<a th:case="'manager'" th:href="@{/CreateStats(id=${campaign.id})}">Statistics</a>
