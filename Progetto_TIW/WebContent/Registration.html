@@ -7,15 +7,15 @@
 <body>
 	<h1>Fill in the form to register.</h1>
 	<form action="RegisterUser" method="POST">
-		Username: <input type="text" name="username"> <br>
-		Password: <input type="password" name="password"> <br>
-		Email: <input type="email" name="email"> <br>
+		Username: <input type="text" name="username" required> <br>
+		Password: <input type="password" name="password" required> <br>
+		Email: <input type="email" name="email" required> <br>
 		Experience: <select name="experience">
 			<option value="high">High</option>
 			<option value="medium">Medium</option>
 			<option value="low">Low</option> </select> <br>
 		Image: <input type="file" name="photo"> <br>
-		Role: <select name="role">
+		Role: <select name="role" required>
 			<option value="manager">Manager</option>
 			<option value="worker">Worker</option> </select> <br>
 			<input type="submit" value="Register Now">

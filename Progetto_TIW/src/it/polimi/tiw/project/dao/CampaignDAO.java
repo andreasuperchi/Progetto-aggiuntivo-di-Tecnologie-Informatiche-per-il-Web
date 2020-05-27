@@ -92,6 +92,7 @@ public class CampaignDAO {
 		String query = "SELECT COUNT(*) FROM annotation WHERE id_image = ?";
 		List<Image> images = new ArrayList<Image>();
 		int numberOfAnnotations = 0;
+		float avgAnnotations = 0;
 		int conflictual = 0;
 
 		images = campaignImages();
@@ -121,9 +122,15 @@ public class CampaignDAO {
 
 				}
 			}
-
+			
+			if (images.size() == 0) {
+				avgAnnotations = 0;
+			} else {
+				avgAnnotations = (float) numberOfAnnotations / images.size();
+			}
+			
 			stats.setNumberOfAnnotations(numberOfAnnotations);
-			stats.setAverageAnnotationsPerImage(numberOfAnnotations / images.size());
+			stats.setAverageAnnotationsPerImage(avgAnnotations);
 			stats.setConflictualAnnotations(conflictual);
 
 		}

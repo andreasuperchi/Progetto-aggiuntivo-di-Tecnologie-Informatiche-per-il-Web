@@ -27,7 +27,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr th:each="c : ${campaigns}" th:class="(${c.id} == ${id})? 'current'">
+			<tr th:each="c : ${campaigns}">
 				<td th:text="${c.id}"></td>
 				<td><a th:href="@{/GoToCampaignDetailsPage(id=${c.id})}">
 					<span th:text="${c.name}"></span></a></td>
