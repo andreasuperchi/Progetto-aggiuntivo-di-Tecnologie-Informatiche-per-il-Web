@@ -22,7 +22,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr th:each="c : ${submittedCampaigns}" th:class="(${c.id} == ${id})? 'current'">
+			<tr th:each="c : ${submittedCampaigns}">
 				<td th:text="${c.id}"></td>
 				<td><a th:href="@{/GoToCampaignDetailsPage(id=${c.id})}">
 					<span th:text="${c.name}"></span></a></td>
@@ -38,7 +38,7 @@
 		</tr>
 		</thead>
 		<tbody>
-		<tr th:each = "c : ${availableCampaigns}" th:class="(${c.id} == ${id})? 'current'">
+		<tr th:each = "c : ${availableCampaigns}">
 			<td th:text="${c.id}"></td>
 			<td th:text="${c.name}"></td>
 			<td> <form th:action = "@{SubmitCampaign(id=${c.id})}" method = "POST"><input type = "submit" name= "submitCammpaigns" value = "Submit"></input></form></td>
