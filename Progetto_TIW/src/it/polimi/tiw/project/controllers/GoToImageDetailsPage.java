@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -64,6 +65,7 @@ public class GoToImageDetailsPage extends HttpServlet {
 		int campaignID = Integer.parseInt(request.getParameter("idCampaign"));
 		Image image = null;
 		List<Annotation> annotations = null;
+		List<Integer> idAnnotations = new ArrayList<>();
 		CampaignDAO cDAO = new CampaignDAO(connection, campaignID);
 		ImageDAO iDAO = new ImageDAO(connection, imageID);
 
@@ -78,12 +80,17 @@ public class GoToImageDetailsPage extends HttpServlet {
 		} catch (SQLException e) {
 			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Loading Error!");
 		}
+		
+		for(Annotation a: annotations) {
+			idAnnotations.add(a.getIdWorker());
+		}
 
 		String path = "/WEB-INF/ImageDetailsPage.html";
 		ServletContext servletContext = getServletContext();
 		final WebContext context = new WebContext(request, response, servletContext, request.getLocale());
 		context.setVariable("annotations", annotations);
 		context.setVariable("image", image);
+		context.setVariable("idAnnotations", idAnnotations);
 
 		templateEngine.process(path, context, response.getWriter());
 	}

@@ -24,8 +24,8 @@
 			Resolution: <span th:text="${image.resolution}"></span><br>
 		</h2>
 	</div>
-	<div align="right" th:switch="${session.user.role}">
-		<form th:case="'worker'" th:action="@{/AddAnnotation(imageID=${image.id}, cID=${image.idCampaign})}" method="post">
+	<div align="right" th:switch="${session.user.role}" th:if = "${!idAnnotations.contains(session.user.id)}">
+		<form th:case="'worker'" th:action="@{/AddAnnotation(imageID=${image.id}, cID=${image.idCampaign})}"  method="post">
 			Validity: <select name="validity" required>
 				<option value="true">True</option>
 				<option value="false">False</option>
