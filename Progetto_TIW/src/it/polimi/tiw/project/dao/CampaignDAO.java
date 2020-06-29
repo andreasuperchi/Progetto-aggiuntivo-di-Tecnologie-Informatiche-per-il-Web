@@ -71,14 +71,11 @@ public class CampaignDAO {
 	public void addImage(String photo, String latitude, String longitude, String county, String municipality,
 			String source, String date, String resolution) throws SQLException {
 		String query = "INSERT INTO image (photo, latitude, longitude, county, municipality, source, date, resolution, id_campaign) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ";
-		
-		String rawLatitude[] = latitude.split(",");
-		String rawLongitude[] = longitude.split(",");
 
 		try (PreparedStatement pstatement = connection.prepareStatement(query)) {
 			pstatement.setString(1, photo);
-			pstatement.setDouble(2, Double.parseDouble(rawLatitude[0] + "." + rawLatitude[1]));
-			pstatement.setDouble(3, Double.parseDouble(rawLongitude[0] + "." + rawLongitude[1]));
+			pstatement.setString(2, latitude);
+			pstatement.setString(3, longitude);
 			pstatement.setString(4, county);
 			pstatement.setString(5, municipality);
 			pstatement.setString(6, source);

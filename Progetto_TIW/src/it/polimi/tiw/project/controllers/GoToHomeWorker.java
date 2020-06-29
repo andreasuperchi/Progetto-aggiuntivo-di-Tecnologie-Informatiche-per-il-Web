@@ -30,10 +30,6 @@ public class GoToHomeWorker extends HttpServlet {
 	private Connection connection = null;
 	TemplateEngine templateEngine;
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-
 	public void init() throws ServletException {
 		ServletContext servletContext = getServletContext();
 		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
