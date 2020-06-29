@@ -8,16 +8,16 @@
 	<h1>Fill in the form to update your personal infos.</h1>
 	<div th:switch="${session.user.role}">
 		<form th:case="'manager'" th:action="@{/ChangePersonalInfo}" method="post">
-			Username: <input type="text" name="username"> <br>
-			Password: <input type="password" name="password"> <br>
-			Email: <input type="email" name="email"> <br>
+			Username: <input type="text" name="username" required> <br>
+			Password: <input type="password" name="password" required> <br>
+			Email: <input type="email" name="email" required> <br>
 			<input type="submit" value="Update Infos">
 		</form>
 		<form th:case="'worker'" th:action="@{/ChangePersonalInfo}" method="post">
-			Username: <input type="text" name="username"> <br>
-			Password: <input type="password" name="password"> <br>
-			Email: <input type="email" name="email"> <br>
-			Experience: <select name="experience">
+			Username: <input type="text" name="username" required> <br>
+			Password: <input type="password" name="password" required> <br>
+			Email: <input type="email" name="email" required> <br>
+			Experience: <select name="experience" required>
 				<option value="high">High</option>
 				<option value="medium">Medium</option>
 				<option value="low">Low</option> </select> <br>

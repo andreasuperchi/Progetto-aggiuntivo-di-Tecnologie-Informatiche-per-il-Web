@@ -67,7 +67,7 @@ public class CreateCampaign extends HttpServlet {
 					"There was an error in the creation of the campaign!");
 		}
 
-		String path = "/Progetto_TIW/GoToHomeManager";
+		String path = "/Progetto_TIW/GoToHomeManager";						//
 		response.sendRedirect(path);
 	}
 
